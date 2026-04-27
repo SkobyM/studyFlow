@@ -1,3 +1,7 @@
+body{
+    max-width: 1200px;
+    margin: 0 auto;
+}
 /* Hero Section Styles */
 #hero {
     display: flex;
@@ -146,10 +150,17 @@
     padding: 25px;
     border: rgba(0, 0, 0, 0.2) solid 1px;
     border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap : 15px;
 }
-
+.card img {
+    width: 36px;
+    height: 36px;
+}
 .card p {
-    margin-top: 10px;
+    /* margin-top: 10px; */
     color: #717182;
 }
 
@@ -208,4 +219,33 @@ footer {
     padding: 20px;
     text-align: center;
     margin-top: 100px;
+}
+
+@media screen and (max-width: 932px) {
+
+    body{
+        padding: 0 20px;
+    }
+    #hero {
+        margin-top: 150px;
+    }
+
+    .steps_cards {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .feature_cards {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .main_benefit_card {
+        padding: 20px;
+    }
+
+    .cards_in_benefits {
+        grid-template-columns: 1fr;
+    }
+    
 }
