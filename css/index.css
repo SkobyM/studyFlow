@@ -219,14 +219,6 @@ body {
     gap: 15px;
 }
 
-/* Footer Styles */
-footer {
-    border-top: 2px solid rgba(0, 0, 0, 0.1);
-    color: #717182;
-    padding: 20px;
-    text-align: center;
-    margin-top: 100px;
-}
 
 @media screen and (max-width: 768px) {
 
