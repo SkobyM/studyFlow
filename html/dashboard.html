@@ -1,24 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="../css/navBar.css">
 </head>
+
 <body>
     <header>
-    <nav class="navbar">
-        <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="appLogo">StudyFlow</div>
+        <nav class="navbar">
+            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="appLogo">StudyFlow
+            </div>
 
-        <ul class="nav-links">
-            <li><a href="index.html" >Home</a></li>
-            <li><a href="dashboard.html" class="active">Dashboard</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+            <ul class="nav-links">
+                <li><a href="index.html" >Home</a></li>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="menu-toggle">☰</div>
 
-    </nav>
-</header>
+        </nav>
+
+        <script>
+            const menu = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
+
+            menu.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+
+                if (navLinks.classList.contains("active")) {
+                    menu.textContent = "✕";
+                } else {
+                    menu.textContent = "☰";
+                }
+            });
+        </script>
+    </header>
 </body>
+
 </html>

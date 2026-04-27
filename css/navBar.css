@@ -8,6 +8,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -74,4 +75,58 @@ body {
 .appLogo {
     width: 30px;
     height: 30px;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (max-width: 576px) {
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        background: white;
+        flex-direction: column;
+        padding: 80px 30px;
+        margin-top: -6px;
+        transition: 0.3s ease;
+    }
+
+    .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .nav-links a.active {
+        background: #030213;
+        color: white;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .nav-links a {
+        font-size: 18px;
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
 }
