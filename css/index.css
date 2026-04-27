@@ -177,6 +177,10 @@ body {
 
 /* Benefits Section Styles */
 
+#benefits-section {
+    padding: 30px;
+}
+
 .main_benefit_card {
     display: flex;
     flex-direction: column;
@@ -240,7 +244,7 @@ footer {
     }
 
     .feature_cards {
-        grid-template-columns: 1fr 1fr ;
+        grid-template-columns: 1fr 1fr;
         padding: 20px;
     }
 
