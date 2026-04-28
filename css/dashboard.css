@@ -1,0 +1,35 @@
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 0 40px;
+}
+
+.add_task_texts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.top_texts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.top_texts p {
+    color: #717182;
+}
+
+.add_task_btn a {
+    text-decoration: none;
+    background-color: black;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    margin-top: 100px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+}
