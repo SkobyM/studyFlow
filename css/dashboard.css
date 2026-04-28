@@ -9,6 +9,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
+    align-items: center;
 }
 
 .top_texts {
@@ -23,13 +24,16 @@ body {
 
 .add_task_btn a {
     text-decoration: none;
-    background-color: black;
-    padding: 20px;
-    text-decoration: none;
+    background-color: #030213;
+    padding: 15px 25px;
     color: white;
-    border-radius: 15px;
-    font-weight: bold;
-    margin-top: 100px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    font-weight: 600;
+    display: inline-flex;
+}
 
+.add_task_btn a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: 0.2s ease;
 }
