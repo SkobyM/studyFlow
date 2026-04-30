@@ -7,6 +7,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="../css/navBar.css">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <script defer src="../js/dashboard.js"></script>
 </head>
 
 <body>
@@ -75,6 +76,24 @@
             <div class="card late_tasks_card">
                 <p>Late <img src="../img/dashboard_late.png" alt="late tasks"></p>
                 <h3>1</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="filter-section">
+        <div class="filter_container">
+            <div class="filter_card filter_by_status">
+                <h5>Filter by Status</h5>
+                <a href="#1" class="filter_btn active">All Tasks</a>
+                <a href="#2" class="filter_btn">In Progress</a>
+                <a href="#3" class="filter_btn">Completed</a>
+                <a href="#4" class="filter_btn">Late</a>
+            </div>
+            <div class="filter_card filter_by_type">
+                <h5>Filter by Type</h5>
+                <a href="#5" class="filter_btn active">All types</a>
+                <a href="#6" class="filter_btn">Individual</a>
+                <a href="#7" class="filter_btn">Group</a>
             </div>
         </div>
     </section>
