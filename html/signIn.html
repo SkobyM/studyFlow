@@ -15,6 +15,27 @@
         <h2 class="sign_in_title">Welcome Back</h2>
         <p class="sign_in_paragraph">Sign in to Your StudyFlow Account</p>
 
+        <div class="form_container">
+            <form action="../php/signIn.php" method="POST">
+
+                <div class="form_group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" placeholder="Email" required class="sign_in_input">
+                </div>
+
+
+                <div class="form_group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" placeholder="Password" required class="sign_in_input">
+                </div>
+
+                <button type="submit" class="sign_in_button">Sign In</button>
+
+            </form>
+            <p class="sign_up_paragraph">Don't have an account? <a href="../html/signUp.html" class="sign_in_link">Sign
+                    Up</a></p>
+        </div>
+
     </div>
 
 </body>
