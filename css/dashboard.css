@@ -3,6 +3,7 @@ body {
     margin: 0 auto;
     margin-top: 100px;
     padding: 0 40px;
+    font-family: 'Inter', sans-serif;
 }
 
 .add_task_texts {
