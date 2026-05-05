@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    gap: 10px;
 }
 
 .sign_in_img_logo {
@@ -83,6 +84,16 @@
 }
 
 .sign_up_paragraph a:hover {
+    text-decoration: underline;
+}
+
+.back_to_home_button{
+    color: #717182;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back_to_home_button:hover {
     text-decoration: underline;
 }
 
