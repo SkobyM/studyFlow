@@ -31,21 +31,22 @@ body {
     gap: 10px;
 }
 
-.nav-links {
+.nav-links ul {
     list-style: none;
     display: flex;
     gap: 25px;
 }
 
-.nav-links a {
+.nav-links ul a {
     position: relative;
     text-decoration: none;
     color: #888;
     font-size: 16px;
     transition: color 0.3s ease;
+    font-weight: 600;
 }
 
-.nav-links a::after {
+.nav-links ul a::after {
     content: "";
     position: absolute;
     left: 0;
@@ -56,19 +57,19 @@ body {
     transition: width 0.3s ease;
 }
 
-.nav-links a:hover::after {
+.nav-links ul a:hover::after {
     width: 100%;
 }
 
-.nav-links a:hover {
+.nav-links ul a:hover {
     color: oklch(0.145 0 0);
 }
 
-.nav-links a.active {
+.nav-links ul a.active {
     color: black;
 }
 
-.nav-links a.active::after {
+.nav-links ul a.active::after {
     width: 100%;
 }
 
@@ -89,7 +90,7 @@ body {
         display: block;
     }
 
-    .nav-links {
+    .nav-links ul {
         position: fixed;
         top: 0;
         right: -100%;
