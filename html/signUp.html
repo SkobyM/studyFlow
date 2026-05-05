@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow</title>
+    <link rel="stylesheet" href="../css/signUp.css">
+</head>
+
+<body>
+
+    <div class="page_container">
+        <img src="../img/appLogoBlack.png" alt="StudyFlow app logo" width="32px" class="sign_in_img_logo">
+        <h2 class="sign_in_title">Create an Account</h2>
+        <p class="sign_in_paragraph">Join StudyFlow to manage your tasks</p>
+
+        <div class="form_container">
+            <form action="../php/signUp.php" method="POST">
+
+                <div class="form_group">
+                    <label for="name">Full Name <span>*</span></label>
+                    <input type="text" name="name" placeholder="Name" required class="sign_in_input">
+                </div>
+                <div class="form_group">
+                    <label for="email">Email Address <span>*</span></label>
+                    <input type="email" name="email" placeholder="Email" required class="sign_in_input">
+                </div>
+
+                <div class="form_group">
+                    <label for="password">Password <span>*</span></label>
+                    <input type="password" name="password" placeholder="Password" required class="sign_in_input">
+                </div>
+
+                <div class="form_group">
+                    <label for="confirm_password">Confirm Password <span>*</span></label>
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required
+                        class="sign_in_input">
+                </div>
+
+                <button type="submit" class="sign_up_button">Create Account</button>
+
+            </form>
+            <p class="sign_in_paragraph">Already have an account? <a href="../html/signIn.html"
+                    class="sign_in_link">Sign In</a></p>
+        </div>
+        <p><a href="../index.html" class="back_to_home_button">&#8592; Back to Home</a></p>
+
+    </div>
+</body>
+
+</html>
