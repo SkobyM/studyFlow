@@ -1,10 +1,4 @@
-body {
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-top: 200px;
-    padding: 0 40px;
-    font-family: 'Inter', sans-serif;
-}
+
 
 /* top texts */
 .main_text_about {
@@ -14,7 +8,7 @@ body {
     text-align: center;
 }
 .main_text_about p {
-    color: #717182;
+    color: var(--text-muted-color);
     margin-bottom: 40px;
 }
 
@@ -24,16 +18,19 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     margin-top: 30px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 15px;
     overflow: hidden;
     margin-bottom: 30px;
+}
+.table_container {
+    overflow-x: auto;
 }
 
 /* table cells */
 td,
 th {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-color);
     padding: 20px;
 }
 
@@ -49,7 +46,7 @@ th {
 }
 
 .card {
-    border: #ddd solid 1px;
+    border: var(--border-color) solid 1px;
     border-radius: 15px;
     padding: 20px;
     display: flex;
