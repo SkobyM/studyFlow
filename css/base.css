@@ -1,0 +1,33 @@
+:root {
+    --primary-color: #030213;
+    --secondary-color: #50E3C2;
+    --background-color: #F5F5F5;
+    --text-primary-color-black: #030213;
+    --text-primary-color-white: #FFFFFF;
+    --text-muted-color: #717182;
+    --button-bg-color: #030213;
+    --border-color: rgba(3, 2, 19, 0.2);
+}
+
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn_style{
+    border: rgba(0, 0, 0, 0.1) solid 1px;
+    border-radius: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn_style:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}

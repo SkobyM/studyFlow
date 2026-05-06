@@ -1,11 +1,4 @@
-body {
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'Inter', sans-serif;
-}
-h1, h2, h3 {
-    font-family: 'Poppins', sans-serif;
-}
+
 /* Hero Section Styles */
 #hero {
     display: flex;
@@ -26,8 +19,8 @@ h1, h2, h3 {
 /* Hero Message Styles */
 .hero-message {
     background: rgba(3, 2, 19, 0.1);
-    border: 1px solid rgba(3, 2, 19, 0.2);
-    color: #030213;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary-color-black);
     padding: 10px;
     border-radius: 20px;
     display: flex;
@@ -43,7 +36,7 @@ h1, h2, h3 {
     margin-right: 10px;
 }
 
-#hero h1 {
+.hero-content h1 {
     font-size: 58px;
     margin: 20px 0;
     background: linear-gradient(to bottom, #000000 0%, #727272 100%);
@@ -53,48 +46,34 @@ h1, h2, h3 {
 
 .hero-content p {
     font-size: 18px;
-    color: #717182;
+    color: var(--text-muted-color);
     margin-bottom: 10px;
 }
 
 /* Button Styles */
 
-.hero-btn {
+.group-hero-btn {
     display: flex;
     flex-direction: row;
     gap: 10px;
     margin-top: 30px;
 }
-
-.btn {
-    border: rgba(0, 0, 0, 0.1) solid 1px;
-    padding: 15px 25px;
-    border-radius: 15px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background-color: transparent;
-}
-
-.btn:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+.group-hero-btn a {
+    text-decoration: none;
 }
 
 .btn-tracking {
-    background-color: #030213;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    padding: 15px 25px;
+    background-color: var(--button-bg-color);
+    color: var(--text-primary-color-white);
 }
-
-.hero-btn a {
-    text-decoration: none;
-    color: #ffffff;
-}
-
 .btn-tracking span {
     font-size: 20px;
+}
+.btn-learn {
+    padding: 15px 25px;
+    color: var(--text-primary-color-black);
+    border: 1px solid var(--border-color);
 }
 
 
@@ -128,35 +107,33 @@ h1, h2, h3 {
 
 }
 
-.steps_cards h1 {
+.steps h1 {
     font-size: 68px;
     margin-bottom: 10px;
 }
 
-.steps_cards p {
-    color: #717182;
+.steps p {
+    color: var(--text-muted-color);
     margin-top: 10px;
 }
 
 /* Feature Section Styles */
 
-.feature_cards {
+.feature_cards_container {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 30px;
     margin-top: 100px;
     padding: 60px;
 }
 
 .card {
-    /* background-color: #e1f1fd; */
-    background-image: linear-gradient(to bottom, rgba(249, 115, 22, 0.1), white);
+    background: linear-gradient(to bottom, rgba(249, 115, 22, 0.1), white);
     padding: 25px;
-    border: rgba(0, 0, 0, 0.2) solid 1px;
+    border: 1px solid var(--border-color);
     border-radius: 25px;
     display: flex;
     flex-direction: column;
-    align-items: start;
     gap: 15px;
 }
 
@@ -166,8 +143,7 @@ h1, h2, h3 {
 }
 
 .card p {
-    /* margin-top: 10px; */
-    color: #717182;
+    color: var(--text-muted-color);
 }
 
 .card:hover {
@@ -180,19 +156,13 @@ h1, h2, h3 {
 
 /* Benefits Section Styles */
 
-#benefits-section {
-    padding: 30px;
-}
-
 .main_benefit_card {
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(3, 2, 19, 0.2);
+    border: 1px solid var(--border-color);
     padding: 30px;
-    margin: 30px auto;
+    margin: 30px;
     border-radius: 25px;
-    max-width: 1200px;
-    justify-content: center;
 }
 
 .main_text_in_benefits {
@@ -203,7 +173,7 @@ h1, h2, h3 {
 }
 
 .main_text_in_benefits p {
-    color: #717182;
+    color: var(--text-muted-color);
     margin-bottom: 20px;
 }
 
@@ -214,7 +184,7 @@ h1, h2, h3 {
 }
 
 .card_border {
-    border: 1px solid rgba(3, 2, 19, 0.2);
+    border: 1px solid var(--border-color);
     border-radius: 25px;
     padding: 20px;
     display: flex;
@@ -238,7 +208,7 @@ h1, h2, h3 {
         padding: 20px;
     }
 
-    .feature_cards {
+    .feature_cards_container {
         grid-template-columns: 1fr 1fr;
         padding: 20px;
     }
@@ -267,7 +237,7 @@ h1, h2, h3 {
         padding: 20px;
     }
 
-    .feature_cards {
+    .feature_cards_container {
         grid-template-columns: 1fr;
         padding: 20px;
     }
