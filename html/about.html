@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>about</title>
+    <title>About</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/navBar.css">
     <link rel="stylesheet" href="../css/about.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <script src="../js/navBar.js" defer></script>
 </head>
 
@@ -20,21 +21,22 @@
                 <ul>
                     <li><a href="../index.html" class="nav">Home</a></li>
                     <li><a href="dashboard.html" class="nav">Dashboard</a></li>
-                    <li><a href="about.html" class="active nav">About</a></li>
+                    <li><a href="about.html" class="active nav" aria-current="page">About</a></li>
                     <li><a href="contact.html" class="nav">Contact</a></li>
                     <li class="sign-in-mobile">
                         <a href="signIn.html" class="signIn_btn">Sign In</a>
                     </li>
                 </ul>
                 <a href="signIn.html" class="btn_signin desktop-only">Sign In</a>
-                <div class="menu-toggle">☰</div>
+                <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             </div>
         </nav>
 
     </header>
 
+    <main>
     <div class="main_text_about">
-        <h2>About Our Team</h2>
+        <h1>About Our Team</h1>
         <p>We're a group of passionate software engineering students dedicated to helping fellow students manage their
             academic workload effectively.</p>
     </div>
@@ -89,6 +91,8 @@
                 academic journey.</p>
         </div>
     </div>
+
+    </main>
 
     <footer>
         <p>&copy; 2026 StudyFlow. All rights reserved.</p>

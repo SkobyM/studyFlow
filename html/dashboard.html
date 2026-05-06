@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/navBar.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <script defer src="../js/dashboard.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <script src="../js/navBar.js" defer></script>
 
 </head>
@@ -21,7 +22,7 @@
             <div class="nav-links">
                 <ul>
                     <li><a href="../index.html" class="nav">Home</a></li>
-                    <li><a href="dashboard.html" class="active nav">Dashboard</a></li>
+                    <li><a href="dashboard.html" class="active nav" aria-current="page">Dashboard</a></li>
                     <li><a href="about.html" class="nav">About</a></li>
                     <li><a href="contact.html" class="nav">Contact</a></li>
                     <li class="sign-in-mobile">
@@ -29,16 +30,17 @@
                     </li>
                 </ul>
                 <a href="signIn.html" class="btn_signin desktop-only">Sign In</a>
-                <div class="menu-toggle">☰</div>
+                <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             </div>
         </nav>
 
     </header>
 
+    <main>
     <section class="add_task_section">
         <div class="add_task_texts">
             <div class="top_texts">
-                <h2>My Dashboard</h2>
+                <h1>My Dashboard</h1>
                 <p>Track your assignments and monitor progress</p>
             </div>
             <div class="add_task_btn">
@@ -52,7 +54,7 @@
         <div class="summary_card_container">
             <div class="card overall_card">
                 <p>Overall Progress </p>
-                <div class="overall_progress"></div>
+                <div class="overall_progress" role="progressbar" aria-label="Overall task progress" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             <div class="card total_tasks_card">
                 <p>Total Tasks <img src="../img/dashboard_task.png" alt="total tasks"></p>
@@ -77,19 +79,20 @@
         <div class="filter_container">
             <div class="filter_card filter_by_status">
                 <h5>Filter by Status</h5>
-                <a href="#1" class="filter_btn active">All Tasks</a>
-                <a href="#2" class="filter_btn">In Progress</a>
-                <a href="#3" class="filter_btn">Completed</a>
-                <a href="#4" class="filter_btn">Late</a>
+                <button type="button" class="filter_btn active">All Tasks</button>
+                <button type="button" class="filter_btn">In Progress</button>
+                <button type="button" class="filter_btn">Completed</button>
+                <button type="button" class="filter_btn">Late</button>
             </div>
             <div class="filter_card filter_by_type">
                 <h5>Filter by Type</h5>
-                <a href="#5" class="filter_btn active">All types</a>
-                <a href="#6" class="filter_btn">Individual</a>
-                <a href="#7" class="filter_btn">Group</a>
+                <button type="button" class="filter_btn active">All types</button>
+                <button type="button" class="filter_btn">Individual</button>
+                <button type="button" class="filter_btn">Group</button>
             </div>
         </div>
     </section>
+    </main>
 </body>
 
 </html>

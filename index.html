@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyFlow</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/navBar.css">
     <link rel="stylesheet" href="css/index.css">
     <script src="js/navBar.js" defer></script>
@@ -20,7 +21,7 @@
 
             <div class="nav-links">
                 <ul>
-                    <li><a href="index.html" class="active nav">Home</a></li>
+                    <li><a href="index.html" class="active nav" aria-current="page">Home</a></li>
                     <li><a href="html/dashboard.html" class="nav">Dashboard</a></li>
                     <li><a href="html/about.html" class="nav">About</a></li>
                     <li><a href="html/contact.html" class="nav">Contact</a></li>
@@ -30,12 +31,13 @@
                 </ul>
                 <a href="html/signIn.html" class="btn_signin desktop-only">Sign In</a>
 
-                <div class="menu-toggle">☰</div>
+                <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             </div>
         </nav>
 
     </header>
 
+    <main>
     <!-- Hero Section -->
     <section id="hero" class="hero-section">
         <div class="hero-content">
@@ -48,8 +50,8 @@
         </div>
 
         <div class="hero-btn">
-            <a href="html/dashboard.html" class="btn btn-tracking">Start Tracking <span>→</span></a>
-            <button class="btn btn-learn">Learn More</button>
+            <a href="html/dashboard.html" class="btn btn-tracking">Start Tracking <span>&rarr;</span></a>
+            <a href="#how-work" class="btn btn-learn">Learn More</a>
         </div>
     </section>
 
@@ -58,25 +60,25 @@
     <section id="how-work" class="how-work-section">
 
         <div class="work-texts">
-            <h3>How it Works</h3>
-            <p>Get started in three simle steps</p>
+            <h2>How it Works</h2>
+            <p>Get started in three simple steps</p>
         </div>
 
         <div class="steps_cards">
             <div class="steps step1">
-                <h1>01</h1>
+                <span class="step_number">01</span>
                 <h3>Add Your Tasks</h3>
                 <p>Create tasks for assignments and projects with deadlines and completion tracking</p>
             </div>
 
             <div class="steps step2">
-                <h1>02</h1>
+                <span class="step_number">02</span>
                 <h3>Track Progress</h3>
                 <p>Monitor your completion rates with visual progress indicators and smart insights</p>
             </div>
 
             <div class="steps step3">
-                <h1>03</h1>
+                <span class="step_number">03</span>
                 <h3>Collaborate & Succeed</h3>
                 <p>Work with your team on group projects and track individual contributions</p>
             </div>
@@ -121,7 +123,7 @@
         <div class="main_benefit_card">
 
             <div class="main_text_in_benefits">
-                <h3>Benefits for Students</h3>
+                <h2>Benefits for Students</h2>
                 <p>Join thousands of students who have transformed their academic journey</p>
             </div>
 
@@ -158,6 +160,8 @@
             </div>
         </div>
     </section>
+
+    </main>
 
     <footer>
         <p>&copy; 2026 StudyFlow. All rights reserved.</p>

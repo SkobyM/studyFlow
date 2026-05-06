@@ -1,14 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-}
-
-
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -17,6 +6,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
+    z-index: 10;
     padding: 15px 60px;
     background-color: #ffffff;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -25,10 +15,15 @@ body {
 .logo {
     font-size: 22px;
     font-weight: bold;
-    color: #333;
+    color: var(--text-color);
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.appLogo {
+    width: 30px;
+    height: 30px;
 }
 
 .nav-links {
@@ -46,7 +41,7 @@ body {
 .nav {
     position: relative;
     text-decoration: none;
-    color: #888;
+    color: #888888;
     font-size: 16px;
     transition: color 0.3s ease;
     font-weight: 600;
@@ -57,61 +52,47 @@ body {
     position: absolute;
     left: 0;
     bottom: -28px;
-    width: 0%;
+    width: 0;
     height: 2px;
-    background-color: black;
+    background-color: var(--primary-color);
     transition: width 0.3s ease;
 }
 
-.nav-links ul a:hover::after {
-    width: 100%;
-}
-
-.nav-links ul a:hover {
-    color: oklch(0.145 0 0);
-}
-
-.nav-links ul a.active {
-    color: black;
-}
-
+.nav-links ul a:hover::after,
 .nav-links ul a.active::after {
     width: 100%;
 }
 
-.appLogo {
-    width: 30px;
-    height: 30px;
-}
-
-.menu-toggle {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-
-.btn_signin {
-    border: rgba(0, 0, 0, 0.1) solid 1px;
-    padding: 10px 16px 10px 16px;
-    border-radius: 10px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background-color: transparent;
-}
-
-.btn_signin:hover {
-    cursor: pointer;
-    transform: scale(1.02);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+.nav-links ul a:hover,
+.nav-links ul a.active {
+    color: var(--primary-color);
 }
 
 .btn_signin {
-    background-color: #030213;
+    background-color: var(--primary-color);
     color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 16px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     gap: 10px;
     text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn_signin:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.menu-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    font-size: 24px;
+    cursor: pointer;
 }
 
 .sign-in-mobile {
@@ -122,51 +103,48 @@ body {
     display: inline-flex;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
 
     .menu-toggle {
         display: block;
     }
 
     .nav-links ul {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 100%;
-        background: white;
+        display: none;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        left: 20px;
+        background: #ffffff;
         flex-direction: column;
-        padding: 80px 30px;
-        margin-top: -6px;
-        transition: 0.3s ease;
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-medium);
+        box-shadow: var(--shadow-card);
     }
 
     .nav-links.active ul {
         display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 70px;
-        right: 0;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
     }
 
-    .nav-links.active ul a.active {
-        background: #030213;
-        color: white;
-        padding: 12px;
-        border-radius: 10px;
-    }
-
-    .nav-links.active ul a {
+    .nav-links ul a {
         font-size: 18px;
         display: block;
         width: 100%;
-        padding: 8px 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
     }
 
-    .nav-links.active ul a::after {
+    .nav-links ul a::after {
         display: none;
+    }
+
+    .nav-links ul a.active {
+        background: var(--primary-color);
+        color: #ffffff;
     }
 
     .desktop-only {
@@ -181,21 +159,19 @@ body {
         display: block;
         width: 100%;
         text-align: center;
-        background-color: #030213;
-        padding: 8px 12px;
+        background-color: var(--primary-color);
+        padding: 10px 12px;
         border-radius: 10px;
-        color: white;
+        color: #ffffff;
         text-decoration: none;
         font-size: 18px;
-        text-decoration: none;
         font-weight: 600;
     }
 }
 
-/* Footer Styles */
 footer {
     border-top: 2px solid rgba(0, 0, 0, 0.1);
-    color: #717182;
+    color: var(--muted-color);
     padding: 20px;
     text-align: center;
     margin-top: 100px;

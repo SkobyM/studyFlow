@@ -1,12 +1,25 @@
-const menu = document.querySelector(".menu-toggle");
+const menuButton = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector(".nav-links");
 
-menu.addEventListener("click", () => {
+if (menuButton && navLinks) {
+    menuButton.addEventListener("click", toggleMenu);
+}
+
+function toggleMenu() {
     navLinks.classList.toggle("active");
 
     if (navLinks.classList.contains("active")) {
-        menu.textContent = "✕";
+        menuButton.innerHTML = "&times;";
+        menuButton.setAttribute("aria-expanded", "true");
+        menuButton.setAttribute("aria-label", "Close menu");
     } else {
-        menu.textContent = "☰";
+        closeMenu();
     }
-});
+}
+
+function closeMenu() {
+    navLinks.classList.remove("active");
+    menuButton.innerHTML = "&#9776;";
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Open menu");
+}
