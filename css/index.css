@@ -8,7 +8,7 @@
 }
 
 /* Hero Content Styles */
-.hero-content {
+.hero_content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,7 +17,7 @@
 }
 
 /* Hero Message Styles */
-.hero-message {
+.hero_message {
     background: rgba(3, 2, 19, 0.1);
     border: 1px solid var(--border-color);
     color: var(--text-primary-color-black);
@@ -30,13 +30,13 @@
     width: fit-content;
 }
 
-.hero-star-image {
+.hero_star_image {
     width: 20px;
     height: 20px;
     margin-right: 10px;
 }
 
-.hero-content h1 {
+.hero_content h1 {
     font-size: 58px;
     margin: 20px 0;
     background: linear-gradient(to bottom, #000000 0%, #727272 100%);
@@ -44,7 +44,7 @@
     -webkit-text-fill-color: transparent;
 }
 
-.hero-content p {
+.hero_content p {
     font-size: 18px;
     color: var(--text-muted-color);
     margin-bottom: 10px;
@@ -52,25 +52,25 @@
 
 /* Button Styles */
 
-.group-hero-btn {
+.group_hero_btn {
     display: flex;
     flex-direction: row;
     gap: 10px;
     margin-top: 30px;
 }
-.group-hero-btn a {
+.group_hero_btn a {
     text-decoration: none;
 }
 
-.btn-tracking {
+.btn_tracking {
     padding: 15px 25px;
     background-color: var(--button-bg-color);
     color: var(--text-primary-color-white);
 }
-.btn-tracking span {
+.btn_tracking span {
     font-size: 20px;
 }
-.btn-learn {
+.btn_learn {
     padding: 15px 25px;
     color: var(--text-primary-color-black);
     border: 1px solid var(--border-color);
@@ -79,14 +79,14 @@
 
 /* How It Works Section */
 
-#how-work {
+#how_work {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 100px;
 }
 
-.work-texts {
+.work_texts {
     display: flex;
     flex-direction: column;
     align-items: center;
