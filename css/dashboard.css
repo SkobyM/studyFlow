@@ -5,43 +5,43 @@ body {
     padding: 0 40px;
 }
 
-.add_task_texts {
+.dashboard-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
     align-items: center;
 }
 
-.top_texts {
+.dashboard-title {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.top_texts p {
+.dashboard-title p {
     color: var(--muted-color);
 }
 
-.add_task_btn a {
+.dashboard-actions a {
     display: inline-flex;
     background-color: var(--primary-color);
     color: white;
 }
 
-.add_task_btn a:hover {
+.dashboard-actions a:hover {
     transform: scale(1.03);
 }
 
 /* summary cards */
 
-.summary_card_container {
+.summary-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     margin-bottom: 50px;
 }
 
-.card {
+.summary-card {
     padding: 20px;
     border-radius: var(--radius-medium);
     border: 1px solid #e0e0e0;
@@ -51,7 +51,7 @@ body {
     gap: 15px;
 }
 
-.card p {
+.summary-card p {
     color: var(--muted-color);
     display: flex;
     align-items: center;
@@ -59,13 +59,13 @@ body {
     gap: 10px;
 }
 
-.overall_card {
+.overall-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
 }
-.overall_progress {
+.overall-progress {
     display: flex;
     width: 100px;
     height: 100px;
@@ -75,7 +75,7 @@ body {
     font-weight: 600;
 }
 
-.overall_progress::after {
+.overall-progress::after {
     content: attr(data-progress) '%';
     display: flex;
     justify-content: center;
@@ -93,7 +93,7 @@ body {
         padding: 0 20px;
     }
 
-    .summary_card_container {
+    .summary-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
@@ -103,20 +103,20 @@ body {
         padding: 0 20px;
     }
 
-    .add_task_texts {
+    .dashboard-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 20px;
     }
 
-    .summary_card_container {
+    .summary-grid {
         grid-template-columns: 1fr;
     }
 }
 
 /*   */
 
-.filter_btn {
+.filter-button {
     padding: 15px 25px;
     color: black;
     border-radius: var(--radius-medium);
@@ -134,21 +134,25 @@ body {
 }
 
 
-.filter_btn:active {
+.filter-button:active {
     transform: scale(0.97);
 }
 
-.filter_btn:hover {
+.filter-button:hover {
     background-color: #e9ebef;
     transform: scale(1.03);
 }
 
-.filter_btn.active {
+.filter-button.active {
     background-color: var(--primary-color);
     color: white;
     transform: none;
 }
 
-.filter_card h5 {
-    color: var(--muted-color)
+.filter-card {
+    margin-bottom: 25px;
+}
+
+.filter-card h5 {
+    color: var(--muted-color);
 }

@@ -58,6 +58,8 @@ body {
 .hero-btn {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
     margin-top: 30px;
 }
@@ -100,7 +102,7 @@ body {
     gap: 20px;
 }
 
-.steps_cards {
+.steps-grid {
     margin-top: 30px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -113,7 +115,7 @@ body {
 
 }
 
-.step_number {
+.step-number {
     display: block;
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
@@ -121,16 +123,16 @@ body {
     margin-bottom: 10px;
 }
 
-.steps_cards p {
+.steps-grid p {
     color: var(--muted-color);
     margin-top: 10px;
 }
 
 /* Feature Section Styles */
 
-.feature_cards {
+.feature-grid {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
     margin-top: 100px;
     padding: 60px;
@@ -145,6 +147,7 @@ body {
     flex-direction: column;
     align-items: start;
     gap: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card img {
@@ -159,7 +162,6 @@ body {
 .card:hover {
     transform: scale(1.03);
     box-shadow: var(--shadow-card);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 
@@ -169,7 +171,7 @@ body {
     padding: 30px;
 }
 
-.main_benefit_card {
+.benefits-card {
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border-color);
@@ -180,25 +182,25 @@ body {
     justify-content: center;
 }
 
-.main_text_in_benefits {
+.benefits-heading {
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.main_text_in_benefits p {
+.benefits-heading p {
     color: var(--muted-color);
     margin-bottom: 20px;
 }
 
-.cards_in_benefits {
+.benefits-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
-.card_border {
+.benefit-item {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-card);
     padding: 20px;
@@ -218,21 +220,25 @@ body {
         margin-top: 150px;
     }
 
-    .steps_cards {
-        grid-template-columns: 1fr 1fr 1fr;
+    #hero h1 {
+        font-size: 44px;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
         padding: 20px;
     }
 
-    .feature_cards {
+    .feature-grid {
         grid-template-columns: 1fr 1fr;
         padding: 20px;
     }
 
-    .main_benefit_card {
+    .benefits-card {
         padding: 20px;
     }
 
-    .cards_in_benefits {
+    .benefits-grid {
         grid-template-columns: 1fr 1fr;
     }
 
@@ -247,21 +253,25 @@ body {
         margin-top: 150px;
     }
 
-    .steps_cards {
+    #hero h1 {
+        font-size: 38px;
+    }
+
+    .steps-grid {
         grid-template-columns: 1fr;
         padding: 20px;
     }
 
-    .feature_cards {
+    .feature-grid {
         grid-template-columns: 1fr;
         padding: 20px;
     }
 
-    .main_benefit_card {
+    .benefits-card {
         padding: 20px;
     }
 
-    .cards_in_benefits {
+    .benefits-grid {
         grid-template-columns: 1fr;
     }
 }

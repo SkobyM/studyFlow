@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/add-task.css">
+    <script src="../js/navbar.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="app-logo">StudyFlow
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="../index.html" class="nav">Home</a></li>
+                    <li><a href="dashboard.html" class="active nav" aria-current="page">Dashboard</a></li>
+                    <li><a href="about.html" class="nav">About</a></li>
+                    <li><a href="contact.html" class="nav">Contact</a></li>
+                    <li class="sign-in-mobile">
+                        <a href="sign-in.html" class="sign-in-button">Sign In</a>
+                    </li>
+                </ul>
+                <a href="sign-in.html" class="sign-in-button desktop-only">Sign In</a>
+                <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="task-heading">
+            <h1>Add Task</h1>
+            <p>Create a new assignment or project task for your dashboard.</p>
+        </section>
+
+        <section class="task-form-card">
+            <form action="#" method="post">
+                <div class="form-field">
+                    <label for="task_title">Task Title *</label>
+                    <input type="text" id="task_title" name="task_title" placeholder="Example: Math assignment" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="task_type">Task Type *</label>
+                        <select id="task_type" name="task_type" required>
+                            <option value="">Select type</option>
+                            <option value="individual">Individual</option>
+                            <option value="group">Group</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="due_date">Due Date *</label>
+                        <input type="date" id="due_date" name="due_date" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="task_status">Status *</label>
+                        <select id="task_status" name="task_status" required>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="late">Late</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="progress">Progress *</label>
+                        <input type="number" id="progress" name="progress" min="0" max="100" value="0" required>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="6" placeholder="Add notes, group members, or requirements."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="dashboard.html" class="btn">Cancel</a>
+                    <button type="submit" class="btn submit-task-button">Save Task</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

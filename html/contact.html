@@ -7,16 +7,16 @@
     <title>Contact</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/navBar.css">
+    <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/contact.css">
-    <script src="../js/navBar.js" defer></script>
+    <script src="../js/navbar.js" defer></script>
 
 </head>
 
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="appLogo">StudyFlow
+            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="app-logo">StudyFlow
             </div>
             <div class="nav-links">
                 <ul>
@@ -25,10 +25,10 @@
                     <li><a href="about.html" class="nav">About</a></li>
                     <li><a href="contact.html" class="active nav" aria-current="page">Contact</a></li>
                     <li class="sign-in-mobile">
-                        <a href="signIn.html" class="signIn_btn">Sign In</a>
+                        <a href="sign-in.html" class="sign-in-button">Sign In</a>
                     </li>
                 </ul>
-                <a href="signIn.html" class="btn_signin desktop-only">Sign In</a>
+                <a href="sign-in.html" class="sign-in-button desktop-only">Sign In</a>
                 <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             </div>
         </nav>
@@ -36,27 +36,27 @@
     </header>
 
     <main>
-    <div class="main_texts_contact">
+    <section class="contact-heading">
         <h1>Get in Touch</h1>
         <p>Have questions or feedback? We'd love to hear from you!</p>
-    </div>
+    </section>
 
     <div class="container">
         <form action="mailto:m7mdbox1@gmail.com" method="post">
-            <div class="form_container">
-                <div class="first_last_name">
-                    <div class="name">
+            <div class="contact-form">
+                <div class="form-row">
+                    <div class="form-field">
                         <label for="first_name">First Name *</label>
-                        <input type="text" id="first_name" name="first_name" placeholder="Your first name" required>
+                        <input type="text" id="first_name" name="first_name" placeholder="Your first name" autocomplete="given-name" required>
                     </div>
-                    <div class="name">
+                    <div class="form-field">
                         <label for="last_name">Last Name *</label>
-                        <input type="text" id="last_name" name="last_name" placeholder="Your last name" required>
+                        <input type="text" id="last_name" name="last_name" placeholder="Your last name" autocomplete="family-name" required>
                     </div>
                 </div>
 
-                <div class="gender_and_number">
-                    <div class="row2">
+                <div class="form-row">
+                    <div class="form-field">
                         <label for="gender">Gender *</label>
                         <select id="gender" name="gender" required>
                             <option value="">Select Gender</option>
@@ -65,30 +65,30 @@
                         </select>
                     </div>
 
-                    <div class="row2">
+                    <div class="form-field">
                         <label for="mobile_number">Mobile Number *</label>
                         <input type="tel" id="mobile_number" name="mobile_number" placeholder="Your mobile number"
-                            required>
+                            autocomplete="tel" required>
                     </div>
                 </div>
 
-                <div class="date_email">
-                    <div class="row3">
+                <div class="form-row">
+                    <div class="form-field">
                         <label for="date_of_birth">Date of Birth *</label>
-                        <input type="date" id="date_of_birth" name="date_of_birth" required>
+                        <input type="date" id="date_of_birth" name="date_of_birth" autocomplete="bday" required>
                     </div>
 
-                    <div class="row3">
+                    <div class="form-field">
                         <label for="email">Email *</label>
-                        <input type="email" id="email" name="email" placeholder="Your email address" required>
+                        <input type="email" id="email" name="email" placeholder="Your email address" autocomplete="email" required>
                     </div>
                 </div>
-                <div class="row4">
+                <div class="form-field">
                     <label for="message">Message *</label>
-                    <textarea name="message" id="message" required rows="10"></textarea>
+                    <textarea name="message" id="message" placeholder="How can we help?" required rows="10"></textarea>
                 </div>
 
-                <div class="send_message">
+                <div class="form-actions">
                     <button type="submit">Send Message</button>
                 </div>
             </div>

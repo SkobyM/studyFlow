@@ -7,15 +7,15 @@
     <title>About</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/navBar.css">
+    <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/about.css">
-    <script src="../js/navBar.js" defer></script>
+    <script src="../js/navbar.js" defer></script>
 </head>
 
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="appLogo">StudyFlow
+            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="app-logo">StudyFlow
             </div>
             <div class="nav-links">
                 <ul>
@@ -24,10 +24,10 @@
                     <li><a href="about.html" class="active nav" aria-current="page">About</a></li>
                     <li><a href="contact.html" class="nav">Contact</a></li>
                     <li class="sign-in-mobile">
-                        <a href="signIn.html" class="signIn_btn">Sign In</a>
+                        <a href="sign-in.html" class="sign-in-button">Sign In</a>
                     </li>
                 </ul>
-                <a href="signIn.html" class="btn_signin desktop-only">Sign In</a>
+                <a href="sign-in.html" class="sign-in-button desktop-only">Sign In</a>
                 <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             </div>
         </nav>
@@ -35,19 +35,19 @@
     </header>
 
     <main>
-    <div class="main_text_about">
+    <section class="about-heading">
         <h1>About Our Team</h1>
         <p>We're a group of passionate software engineering students dedicated to helping fellow students manage their
             academic workload effectively.</p>
-    </div>
+    </section>
 
-    <div class="table_container">
+    <section class="table-container" aria-label="Team members">
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Contact</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Contact</th>
                 </tr>
             </thead>
 
@@ -74,23 +74,23 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </section>
 
-    <div class="goal_container">
-        <div class="card our_mission">
+    <section class="goal-container">
+        <div class="card mission-card">
             <img src="../img/about_mission.png" alt="Mission Icon">
             <h3>Our Mission</h3>
             <p>To empower students with tools that simplify task management, enhance productivity, and reduce academic
                 stress through intuitive technology.</p>
         </div>
 
-        <div class="card our_vision">
+        <div class="card vision-card">
             <img src="../img/about_vision.png" alt="Vision Icon">
             <h3>Our Vision</h3>
             <p>Creating a comprehensive platform that becomes an essential companion for every university student's
                 academic journey.</p>
         </div>
-    </div>
+    </section>
 
     </main>
 

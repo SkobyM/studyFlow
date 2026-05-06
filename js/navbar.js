@@ -3,6 +3,8 @@ const navLinks = document.querySelector(".nav-links");
 
 if (menuButton && navLinks) {
     menuButton.addEventListener("click", toggleMenu);
+    navLinks.addEventListener("click", closeMenuWhenLinkIsClicked);
+    document.addEventListener("keydown", closeMenuWhenEscapeIsPressed);
 }
 
 function toggleMenu() {
@@ -22,4 +24,16 @@ function closeMenu() {
     menuButton.innerHTML = "&#9776;";
     menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute("aria-label", "Open menu");
+}
+
+function closeMenuWhenLinkIsClicked(event) {
+    if (event.target.tagName === "A") {
+        closeMenu();
+    }
+}
+
+function closeMenuWhenEscapeIsPressed(event) {
+    if (event.key === "Escape") {
+        closeMenu();
+    }
 }

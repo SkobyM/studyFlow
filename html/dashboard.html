@@ -7,17 +7,17 @@
     <title>Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/navBar.css">
+    <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <script defer src="../js/dashboard.js"></script>
-    <script src="../js/navBar.js" defer></script>
+    <script src="../js/navbar.js" defer></script>
 
 </head>
 
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="appLogo">StudyFlow
+            <div class="logo"><img src="../img/appLogoBlack.png" alt="StudyFlow app logo" class="app-logo">StudyFlow
             </div>
             <div class="nav-links">
                 <ul>
@@ -26,10 +26,10 @@
                     <li><a href="about.html" class="nav">About</a></li>
                     <li><a href="contact.html" class="nav">Contact</a></li>
                     <li class="sign-in-mobile">
-                        <a href="signIn.html" class="signIn_btn">Sign In</a>
+                        <a href="sign-in.html" class="sign-in-button">Sign In</a>
                     </li>
                 </ul>
-                <a href="signIn.html" class="btn_signin desktop-only">Sign In</a>
+                <a href="sign-in.html" class="sign-in-button desktop-only">Sign In</a>
                 <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
             </div>
         </nav>
@@ -37,58 +37,58 @@
     </header>
 
     <main>
-    <section class="add_task_section">
-        <div class="add_task_texts">
-            <div class="top_texts">
+    <section class="dashboard-header-section">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
                 <h1>My Dashboard</h1>
                 <p>Track your assignments and monitor progress</p>
             </div>
-            <div class="add_task_btn">
-                <a href="addTask.html" class="btn">+ Add Task</a>
+            <div class="dashboard-actions">
+                <a href="add-task.html" class="btn">+ Add Task</a>
             </div>
         </div>
     </section>
 
     <section class="summary-section">
 
-        <div class="summary_card_container">
-            <div class="card overall_card">
+        <div class="summary-grid">
+            <div class="card summary-card overall-card">
                 <p>Overall Progress </p>
-                <div class="overall_progress" role="progressbar" aria-label="Overall task progress" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="overall-progress" role="progressbar" aria-label="Overall task progress" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
-            <div class="card total_tasks_card">
+            <div class="card summary-card">
                 <p>Total Tasks <img src="../img/dashboard_task.png" alt="total tasks"></p>
-                <h3 class="total_tasks_value">5</h3>
+                <h3 class="total-tasks-value">5</h3>
             </div>
-            <div class="card completed_tasks_card">
+            <div class="card summary-card">
                 <p>Completed <img src="../img/dashboard_completed.png" alt="completed tasks"></p>
-                <h3 class="completed_tasks_value">1</h3>
+                <h3 class="completed-tasks-value">1</h3>
             </div>
-            <div class="card in_progress_tasks_card">
+            <div class="card summary-card">
                 <p>In Progress <img src="../img/dashboard_progress.png" alt="in progress tasks"></p>
-                <h3 class="pending_tasks_value">3</h3>
+                <h3 class="pending-tasks-value">3</h3>
             </div>
-            <div class="card late_tasks_card">
+            <div class="card summary-card">
                 <p>Late <img src="../img/dashboard_late.png" alt="late tasks"></p>
-                <h3 class="late_tasks_value">1</h3>
+                <h3 class="late-tasks-value">1</h3>
             </div>
         </div>
     </section>
 
     <section class="filter-section">
-        <div class="filter_container">
-            <div class="filter_card filter_by_status">
+        <div class="filter-container">
+            <div class="filter-card filter-by-status">
                 <h5>Filter by Status</h5>
-                <button type="button" class="filter_btn active">All Tasks</button>
-                <button type="button" class="filter_btn">In Progress</button>
-                <button type="button" class="filter_btn">Completed</button>
-                <button type="button" class="filter_btn">Late</button>
+                <button type="button" class="filter-button active" aria-pressed="true">All Tasks</button>
+                <button type="button" class="filter-button" aria-pressed="false">In Progress</button>
+                <button type="button" class="filter-button" aria-pressed="false">Completed</button>
+                <button type="button" class="filter-button" aria-pressed="false">Late</button>
             </div>
-            <div class="filter_card filter_by_type">
+            <div class="filter-card filter-by-type">
                 <h5>Filter by Type</h5>
-                <button type="button" class="filter_btn active">All types</button>
-                <button type="button" class="filter_btn">Individual</button>
-                <button type="button" class="filter_btn">Group</button>
+                <button type="button" class="filter-button active" aria-pressed="true">All Types</button>
+                <button type="button" class="filter-button" aria-pressed="false">Individual</button>
+                <button type="button" class="filter-button" aria-pressed="false">Group</button>
             </div>
         </div>
     </section>

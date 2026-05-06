@@ -4,15 +4,15 @@ const pendingTasks = 3;
 const lateTasks = 1;
 const progressValue = 66;
 
-summaryValues();
-progressBar();
-filterButton();
+updateSummaryValues();
+updateProgressBar();
+setupFilterButtons();
 
-function summaryValues() {
-    const totalTasksValue = document.querySelector(".total_tasks_value");
-    const completedTasksValue = document.querySelector(".completed_tasks_value");
-    const pendingTasksValue = document.querySelector(".pending_tasks_value");
-    const lateTasksValue = document.querySelector(".late_tasks_value");
+function updateSummaryValues() {
+    const totalTasksValue = document.querySelector(".total-tasks-value");
+    const completedTasksValue = document.querySelector(".completed-tasks-value");
+    const pendingTasksValue = document.querySelector(".pending-tasks-value");
+    const lateTasksValue = document.querySelector(".late-tasks-value");
 
     totalTasksValue.textContent = totalTasks;
     completedTasksValue.textContent = completedTasks;
@@ -20,8 +20,8 @@ function summaryValues() {
     lateTasksValue.textContent = lateTasks;
 }
 
-function progressBar() {
-    const progressBars = document.querySelectorAll(".overall_progress");
+function updateProgressBar() {
+    const progressBars = document.querySelectorAll(".overall-progress");
 
     progressBars.forEach((progress) => {
         progress.dataset.progress = progressValue;
@@ -30,19 +30,21 @@ function progressBar() {
     });
 }
 
-function filterButton() {
-    const filterCards = document.querySelectorAll(".filter_card");
+function setupFilterButtons() {
+    const filterCards = document.querySelectorAll(".filter-card");
 
     filterCards.forEach((card) => {
-        const buttons = card.querySelectorAll(".filter_btn");
+        const buttons = card.querySelectorAll(".filter-button");
 
         buttons.forEach((button) => {
             button.addEventListener("click", () => {
                 buttons.forEach((currentButton) => {
                     currentButton.classList.remove("active");
+                    currentButton.setAttribute("aria-pressed", "false");
                 });
 
                 button.classList.add("active");
+                button.setAttribute("aria-pressed", "true");
             });
         });
     });
