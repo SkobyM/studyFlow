@@ -149,10 +149,25 @@ function summary_values() {
     const pending_tasks_value = document.querySelector('.pending_tasks_value');
     const late_tasks_value = document.querySelector('.late_tasks_value');
 
+    let completedCount = 0;
+    let inProgressCount = 0;
+    let pendingCount = 0;
+    let lateCount = 0;
+
+    tasks.forEach(task => {
+        if (task.taskStatus === "Completed") {
+                completedCount++;
+        } else if (task.taskStatus === "In Progress") {
+            inProgressCount++;
+        } else if (task.taskStatus === "Late") {
+            lateCount++;
+        }
+    });
+
+    completed_tasks_value.textContent = completedCount;
+    pending_tasks_value.textContent = inProgressCount;
+    late_tasks_value.textContent = lateCount;
     total_tasks_value.textContent = tasksInformations;
-    completed_tasks_value.textContent = tasksInformations;
-    pending_tasks_value.textContent = tasksInformations;
-    late_tasks_value.textContent = tasksInformations;
 }
 
 function filterButton() {
