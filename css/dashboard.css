@@ -194,9 +194,7 @@
     align-items: center;
 }
 
-.course_name_individual_task_card,
-.date_task_individual,
-.days_left_individual {
+.text_muted {
     color: var(--text-muted-color);
 }
 
@@ -211,10 +209,6 @@
     display: inline-flex;
 }
 
-/* .task_title_individual {
-    margin-top: -10px;
-} */
-
 .progress_texts_container {
     display: flex;
     flex-direction: row;
@@ -228,6 +222,7 @@
     background: #ececf0;
     border-radius: 999px;
     overflow: hidden;
+    margin-top: 8px;
 }
 
 .progress_fill {
@@ -322,6 +317,7 @@
     flex-direction: column;
     gap: 8px;
 }
+
 .task_type_container span {
     color: red;
 }
@@ -342,8 +338,57 @@
     cursor: pointer;
 }
 
+
+
+/*  */
+
+.modal_overlay_detail_info {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal_header_detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.modal_individual_task_detail {
+    background: white;
+    width: 600px;
+    height: auto;
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.close_modal_btn_detail {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.task_title_detail {
+    margin-top: 8px;
+}
+
+.progress_status_date {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 12px 0 18px 0;
+}
+
 .hidden {
     display: none;
 }
-
-/*  */

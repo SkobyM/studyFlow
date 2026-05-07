@@ -10,7 +10,15 @@ renderTasks();
 const form = document.querySelector('.add_task_form');
 const addTaskBtn = document.querySelector('.add_task_btn a');
 const modal = document.querySelector('.modal_overlay');
+const modalDetail = document.querySelector('.modal_overlay_detail_info');
 const closeModalBtn = document.querySelector('.close_modal_btn');
+const closeModalBtnDetail = document.querySelector('.close_modal_btn_detail');
+
+
+closeModalBtnDetail.addEventListener('click', () => {
+    modalDetail.classList.add('hidden');
+});
+
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -49,6 +57,54 @@ function addTask() {
     summary_values();
 }
 
+function getTaskDetails(taskId) {
+    const container = document.querySelector('.task_information_container');
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+        let statusColor = "#3b82f6";
+
+        if (task.taskStatus === "Completed") {
+            statusColor = "#22c55e";
+        }
+
+        if (task.taskStatus === "Late") {
+            statusColor = "#ef4444";
+        }
+        return container.innerHTML = `
+
+
+                <p class="text_muted">${task.courseName}</p>
+                <h2 class="task_title_detail">${task.taskTitle}</h2>
+
+                <div class="progress_status_date">
+                    <p class="status_task_individual_task_card">${task.taskStatus}</p>
+                    <p class="text_muted">${task.taskDate}</p>
+                </div>
+
+                <div class="progress_texts_container">
+                    <p>Progress</p>
+
+                    <h4 class="progress_percentage">
+                    ${task.progressPercentage}%
+                    </h4>
+                </div>
+
+                <div class="progress_bar">
+                    <div 
+                        class="progress_fill"
+                        style="
+                            width:${task.progressPercentage}%;
+                            background:${statusColor};
+                        "
+                    >
+                    </div>
+                </div>
+        `;
+    } else {
+        return "<p>Task not found.</p>";
+    }
+}
+
 function renderTasks() {
 
     const container = document.querySelector('.individual_tasks_container');
@@ -76,7 +132,7 @@ function renderTasks() {
 >
 
     <div class="course_name_status_task">
-        <p class="course_name_individual_task_card">
+        <p class="text_muted">
             ${task.courseName}
         </p>
 
@@ -116,11 +172,11 @@ function renderTasks() {
     </div>
 
     <div class="task_information_individual">
-        <p class="date_task_individual">
+        <p class="text_muted">
             ${task.taskDate}
         </p>
 
-        <p class="days_left_individual">
+        <p class="text_muted">
             ${task.daysLeft} days left
         </p>
     </div>
@@ -129,23 +185,27 @@ function renderTasks() {
 `;
     });
 
-
+    addTaskCardEventsRender();
 }
 
-const taskCards = document.querySelectorAll('.individual_tasks_card');
+function addTaskCardEventsRender() {
 
-taskCards.forEach(card => {
+    const taskCards = document.querySelectorAll('.individual_tasks_card');
 
-    card.addEventListener('click', () => {
+    taskCards.forEach(card => {
 
-        const taskId = Number(card.dataset.id);
+        card.addEventListener('click', (e) => {
 
-        const clickedTask = tasks.find(task => task.id === taskId);
-        console.log(clickedTask);
+            e.preventDefault();
 
+            const taskId = Number(card.dataset.id);
+
+            modalDetail.classList.remove('hidden');
+
+            document.querySelector('.task_information_container').innerHTML = getTaskDetails(taskId);
+        });
     });
-
-});
+}
 
 
 
