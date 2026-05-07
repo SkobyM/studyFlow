@@ -38,6 +38,7 @@ function addTask() {
         daysLeft: 7,
         taskStatus: "In Progress",
         progressPercentage: 0,
+        id: Date.now(),
     };
 
     tasks.push(newTask);
@@ -70,6 +71,7 @@ function renderTasks() {
 
 <div 
     class="individual_tasks_card"
+    data-id="${task.id}"
     style="border-left: 5px solid ${statusColor};"
 >
 
@@ -130,6 +132,21 @@ function renderTasks() {
 
 }
 
+const taskCards = document.querySelectorAll('.individual_tasks_card');
+
+taskCards.forEach(card => {
+
+    card.addEventListener('click', () => {
+
+        const taskId = Number(card.dataset.id);
+
+        const clickedTask = tasks.find(task => task.id === taskId);
+        console.log(clickedTask);
+
+    });
+
+});
+
 
 
 function progressBar() {
@@ -156,7 +173,7 @@ function summary_values() {
 
     tasks.forEach(task => {
         if (task.taskStatus === "Completed") {
-                completedCount++;
+            completedCount++;
         } else if (task.taskStatus === "In Progress") {
             inProgressCount++;
         } else if (task.taskStatus === "Late") {
