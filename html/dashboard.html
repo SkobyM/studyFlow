@@ -98,29 +98,58 @@
 
         <div class="individual_tasks_container">
 
-            <div class="individual_tasks_card">
-
-                <div class="course_name_status_task">
-                    <p class="course_name_individual_task_card"></p>
-                    <p class="status_task_individual_task_card"></p>
-                </div>
-
-                <h3 class="task_title_individual"></h3>
-                <div class="progress_texts_container">
-                    <p>Progress</p>
-                    <h4 class="progress_percentage"></h4>
-                </div>
-                <div class="progress_bar">
-                    <div class="progress_fill"></div>
-                </div>
-
-                <div class="task_information_individual">
-                    <p class="date_task_individual"></p>
-                    <p class="days_left_individual"></p>
-                </div>
-            </div>
         </div>
     </section>
+
+    <div class="modal_overlay hidden">
+
+        <div class="add_task_modal">
+
+            <div class="modal_header">
+                <h2>Add New Task</h2>
+
+                <button class="close_modal_btn">✕</button>
+            </div>
+
+            <form class="add_task_form">
+
+                <div class="basic_information_container">
+                    <h3>Basic Information</h3>
+                    <h5>Course Name <span>*</span></h5>
+                    <input type="text" placeholder="e.g., Computer Networks" class="course_input" required>
+
+                    <h5>Task Title <span>*</span></h5>
+                    <input type="text" placeholder="e.g., TCP/IP Protocol Analysis" class="title_input" required>
+                </div>
+
+                <div class="deadline_container">
+                    <h3>Deadline</h3>
+                    <h5>Due Date <span>*</span></h5>
+                    <input type="date" class="date_input" required>
+                    <p>💡 You can add subtasks and track progress after creating the task.</p>
+                </div>
+
+
+                <div class="task_type_container">
+                    <h3>Task Type</h3>
+                    <h5>Type <span>*</span></h5>
+                    <select class="type_select" required>
+                        <option value="" disabled selected>Select task type</option>
+                        <option value="individual">Individual</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+
+
+                <button type="submit" class="submit_task_btn">
+                    Add Task
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
 </body>
 
 </html>

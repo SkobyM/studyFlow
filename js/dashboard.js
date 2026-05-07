@@ -1,44 +1,129 @@
 const percentageValue = 55;
-const tasksInformations = 5;
 
 
-const taskData = {
-    courseName: "Computer Networks",
-    taskStatus: "Completed",
-    taskTitle: "TCP/IP Protocol",
-    progressPercentage: 55,
-    taskDate: "2024-06-30",
-    daysLeft: 5
-};
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+const tasksInformations = tasks.length;
 
 filterButton();
 summary_values()
 progressBar()
-individualCardInformation()
-
-function individualCardInformation() {
-
-    const courseName = document.querySelector('.course_name_individual_task_card');
-    const taskStatus = document.querySelector('.status_task_individual_task_card');
-    const taskTitle = document.querySelector('.task_title_individual');
-    const progressPercentage = document.querySelector('.progress_percentage');
-    const taskDate = document.querySelector('.date_task_individual');
-    const daysLeft = document.querySelector('.days_left_individual');
+renderTasks();
 
 
-    courseName.textContent = taskData.courseName;
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
-    taskStatus.textContent = taskData.taskStatus;
+const form = document.querySelector('.add_task_form');
 
-    taskTitle.textContent = taskData.taskTitle;
+form.addEventListener('submit', (e) => {
 
-    progressPercentage.textContent = `${taskData.progressPercentage}%`;
+    e.preventDefault();
 
-    taskDate.textContent = taskData.taskDate;
+    addTask();
 
-    daysLeft.textContent = `${taskData.daysLeft} days left`;
+});
+function addTask() {
+    const newTask = {
+        courseName: document.querySelector('.course_input').value,
+        taskTitle: document.querySelector('.title_input').value,
+        taskDate: document.querySelector('.date_input').value,
+        daysLeft: 7
+
+    };
+
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+    modal.classList.add('hidden');
+    form.reset();
+}
+
+
+function renderTasks() {
+
+    const container = document.querySelector('.individual_tasks_container');
+
+    container.innerHTML = "";
+
+    tasks.forEach(task => {
+
+        let statusColor = "#3b82f6";
+
+        if (task.taskStatus === "Completed") {
+            statusColor = "#22c55e";
+        }
+
+        if (task.taskStatus === "Late") {
+            statusColor = "#ef4444";
+        }
+
+        container.innerHTML += `
+
+<div 
+    class="individual_tasks_card"
+    style="border-left: 5px solid ${statusColor};"
+>
+
+    <div class="course_name_status_task">
+        <p class="course_name_individual_task_card">
+            ${task.courseName}
+        </p>
+
+        <p 
+            class="status_task_individual_task_card"
+            style="
+                background:${statusColor}20;
+                color:${statusColor};
+                border:1px solid ${statusColor}50;
+            "
+        >
+            ${task.taskStatus}
+        </p>
+    </div>
+
+    <h3 class="task_title_individual">
+        ${task.taskTitle}
+    </h3>
+
+    <div class="progress_texts_container">
+        <p>Progress</p>
+
+        <h4 class="progress_percentage">
+            ${task.progressPercentage}%
+        </h4>
+    </div>
+
+    <div class="progress_bar">
+        <div 
+            class="progress_fill"
+            style="
+                width:${task.progressPercentage}%;
+                background:${statusColor};
+            "
+        >
+        </div>
+    </div>
+
+    <div class="task_information_individual">
+        <p class="date_task_individual">
+            ${task.taskDate}
+        </p>
+
+        <p class="days_left_individual">
+            ${task.daysLeft} days left
+        </p>
+    </div>
+
+</div>
+`;
+    });
+
 
 }
+
+
 
 function progressBar() {
     const progressBars = document.querySelectorAll(".overall_progress");
@@ -79,3 +164,22 @@ function filterButton() {
         });
     });
 }
+
+const addTaskBtn = document.querySelector('.add_task_btn a');
+const modal = document.querySelector('.modal_overlay');
+
+addTaskBtn.addEventListener('click', (e) => {
+
+    e.preventDefault();
+
+    modal.classList.remove('hidden');
+
+});
+
+const closeModalBtn = document.querySelector('.close_modal_btn');
+
+closeModalBtn.addEventListener('click', () => {
+
+    modal.classList.add('hidden');
+
+});

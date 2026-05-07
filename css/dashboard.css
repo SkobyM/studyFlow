@@ -194,7 +194,9 @@
     align-items: center;
 }
 
-.course_name_individual_task_card, .date_task_individual, .days_left_individual {
+.course_name_individual_task_card,
+.date_task_individual,
+.days_left_individual {
     color: var(--text-muted-color);
 }
 
@@ -229,13 +231,117 @@
 }
 
 .progress_fill {
-    width: 75%;
     height: 100%;
-    background: #3b82f6;
 }
 
-.task_information_individual{
+.task_information_individual {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+
+.modal_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.add_task_modal {
+    background: white;
+    width: 600px;
+    height: auto;
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.close_modal_btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.add_task_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.basic_information_container {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.basic_information_container span {
+    color: red;
+}
+
+.deadline_container {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.deadline_container span {
+    color: red;
+}
+
+.deadline_container p {
+    color: var(--text-muted-color);
+    font-size: 12px;
+}
+
+.task_type_container {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.task_type_container span {
+    color: red;
+}
+
+.add_task_form input,
+.add_task_form select {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.submit_task_btn {
+    background: #030213;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
 }
