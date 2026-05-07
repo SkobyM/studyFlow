@@ -1,36 +1,43 @@
 const percentageValue = 55;
 
-
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-const tasksInformations = tasks.length;
 
 filterButton();
 summary_values()
 progressBar()
 renderTasks();
 
+const form = document.querySelector('.add_task_form');
+const addTaskBtn = document.querySelector('.add_task_btn a');
+const modal = document.querySelector('.modal_overlay');
+const closeModalBtn = document.querySelector('.close_modal_btn');
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    addTask();
+});
+
+addTaskBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.classList.remove('hidden');
+});
+
+closeModalBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+});
 
 function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-const form = document.querySelector('.add_task_form');
-
-form.addEventListener('submit', (e) => {
-
-    e.preventDefault();
-
-    addTask();
-
-});
 function addTask() {
     const newTask = {
         courseName: document.querySelector('.course_input').value,
         taskTitle: document.querySelector('.title_input').value,
         taskDate: document.querySelector('.date_input').value,
-        daysLeft: 7
-
+        daysLeft: 7,
+        taskStatus: "In Progress",
+        progressPercentage: 0,
     };
 
     tasks.push(newTask);
@@ -38,8 +45,8 @@ function addTask() {
     renderTasks();
     modal.classList.add('hidden');
     form.reset();
+    summary_values();
 }
-
 
 function renderTasks() {
 
@@ -136,6 +143,7 @@ function progressBar() {
 }
 
 function summary_values() {
+    const tasksInformations = tasks.length;
     const total_tasks_value = document.querySelector('.total_tasks_value');
     const completed_tasks_value = document.querySelector('.completed_tasks_value');
     const pending_tasks_value = document.querySelector('.pending_tasks_value');
@@ -164,22 +172,3 @@ function filterButton() {
         });
     });
 }
-
-const addTaskBtn = document.querySelector('.add_task_btn a');
-const modal = document.querySelector('.modal_overlay');
-
-addTaskBtn.addEventListener('click', (e) => {
-
-    e.preventDefault();
-
-    modal.classList.remove('hidden');
-
-});
-
-const closeModalBtn = document.querySelector('.close_modal_btn');
-
-closeModalBtn.addEventListener('click', () => {
-
-    modal.classList.add('hidden');
-
-});
