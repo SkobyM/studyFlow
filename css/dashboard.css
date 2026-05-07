@@ -392,3 +392,109 @@
 .hidden {
     display: none;
 }
+
+/* subTasks */
+
+.subtask_title_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+
+
+
+/* Style the list items */
+ul li {
+  cursor: pointer;
+  position: relative;
+  padding: 12px 8px 12px 40px;
+  list-style-type: none;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 18px;
+  transition: 0.2s;
+  
+  /* make the list items unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Darker background-color on hover */
+ul li:hover {
+  background: #ddd;
+}
+
+/* When clicked on, add a background color and strike out text */
+ul li.checked {
+  color: var(--text-muted-color);
+  text-decoration: line-through;
+}
+
+/* Add a "checked" mark when clicked on */
+ul li.checked::before {
+  content: '';
+  position: absolute;
+  border-color: #030213;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+/* Style the close button */
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+.paragraph_if_no_subtask{
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    border-style: dashed;
+    margin-bottom: 8px;
+    color: var(--text-muted-color);
+    text-align: center;
+    display: none;
+}
+.header{
+    display: flex;
+    gap: 8px;
+}
+
+/* Style the input */
+.header input {
+  margin: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  width: 100%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+
+/* Style the "Add" button */
+.addBtn {
+  padding: 10px 20px 10px 20px;
+  background: var(--text-muted-color);
+  border-radius: 12px;
+  color: white;
+  float: left;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addBtn:hover {
+  background-color: #bbb;
+}

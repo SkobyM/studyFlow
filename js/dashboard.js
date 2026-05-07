@@ -1,7 +1,5 @@
-const percentageValue = 55;
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
 filterButton();
 summary_values()
 progressBar()
@@ -46,6 +44,7 @@ function addTask() {
         daysLeft: 7,
         taskStatus: "In Progress",
         progressPercentage: 0,
+        subtasks: [],
         id: Date.now(),
     };
 
@@ -55,6 +54,7 @@ function addTask() {
     modal.classList.add('hidden');
     form.reset();
     summary_values();
+    progressBar();
 }
 
 function getTaskDetails(taskId) {
@@ -70,6 +70,19 @@ function getTaskDetails(taskId) {
         if (task.taskStatus === "Late") {
             statusColor = "#ef4444";
         }
+
+        const subtasksHTML = task.subtasks.map((subtask, index) => {
+
+            return `
+        <li 
+            class="${subtask.completed ? 'checked' : ''}"
+            data-index="${index}"
+        >
+            ${subtask.text}
+        </li>
+    `;
+
+        }).join('');
         return container.innerHTML = `
 
 
@@ -97,6 +110,30 @@ function getTaskDetails(taskId) {
                             background:${statusColor};
                         "
                     >
+                    </div>
+                </div>
+
+                <div class="subtask_container">
+                    <div class="subtask_title_container">
+                        <h4>Subtasks</h4>
+                        <p class="remaining_subtask text_muted">3/4</p>
+                    </div>
+
+
+                    <ul id="myUL">
+                        ${task.subtasks.length === 0
+                ? `
+                            <p class="paragraph_if_no_subtask">
+                                No subtasks yet — break this task into smaller steps
+                            </p>
+                            `
+                : subtasksHTML
+            }
+                    </ul>
+
+                    <div id="myDIV" class="header">
+                        <input type="text" id="myInput" placeholder="Add a new subtask">
+                        <span onclick="newElement(${task.id})" class="addBtn">+</span>
                     </div>
                 </div>
         `;
@@ -202,7 +239,37 @@ function addTaskCardEventsRender() {
 
             modalDetail.classList.remove('hidden');
 
-            document.querySelector('.task_information_container').innerHTML = getTaskDetails(taskId);
+            getTaskDetails(taskId);
+            // Add a "checked" symbol when clicking on a list item
+            const list = document.querySelector('#myUL');
+
+            list.addEventListener('click', (ev) => {
+
+                if (ev.target.tagName === 'LI') {
+
+                    const subtaskIndex =
+                        Number(ev.target.dataset.index);
+
+                    const task =
+                        tasks.find(t => t.id === taskId);
+
+                    task.subtasks[subtaskIndex].completed =
+                        !task.subtasks[subtaskIndex].completed;
+
+                    updateTaskProgress(task);
+
+                    saveTasks();
+
+                    modalDetail.classList.remove('hidden');
+
+                    getTaskDetails(taskId);
+
+                    addTaskCardEventsRender();
+
+                }
+
+            });
+
         });
     });
 }
@@ -210,13 +277,31 @@ function addTaskCardEventsRender() {
 
 
 function progressBar() {
-    const progressBars = document.querySelectorAll(".overall_progress");
 
-    progressBars.forEach(progress => {
-        const value = percentageValue; // This value should be dynamically calculated based on the tasks data
-        progress.dataset.progress = value;
-        progress.style.setProperty("--progress", `${value * 3.6}deg`);
-    });
+    const progress = document.querySelector(".overall_progress");
+
+    if (tasks.length === 0) {
+
+        progress.dataset.progress = 0;
+
+        progress.style.setProperty("--progress", `0deg`);
+
+        return;
+    }
+
+    const totalProgress =
+        tasks.reduce((sum, task) =>
+            sum + task.progressPercentage, 0);
+
+    const averageProgress =
+        Math.round(totalProgress / tasks.length);
+
+    progress.dataset.progress = averageProgress;
+
+    progress.style.setProperty(
+        "--progress",
+        `${averageProgress * 3.6}deg`
+    );
 }
 
 function summary_values() {
@@ -263,4 +348,76 @@ function filterButton() {
             });
         });
     });
+}
+
+
+// Create a "close" button and append it to each list item
+
+
+
+
+// Create a new list item when clicking on the "Add" button
+function newElement(taskId) {
+    const input = document.getElementById("myInput");
+
+    const inputValue = input.value;
+
+    const task = tasks.find(t => t.id === taskId);
+
+    if (inputValue === '') {
+
+        alert("You must write something!");
+
+        return;
+    }
+
+    task.subtasks.push({
+        text: inputValue,
+        completed: false
+    });
+
+    input.value = "";
+
+    saveTasks();
+
+    getTaskDetails(taskId);
+
+    updateTaskProgress(task);
+
+}
+
+function updateTaskProgress(task) {
+
+    if (task.subtasks.length === 0) {
+
+        task.progressPercentage = 0;
+
+        return;
+    }
+
+    const completedSubtasks =
+        task.subtasks.filter(subtask =>
+            subtask.completed
+        ).length;
+
+    task.progressPercentage =
+        Math.round(
+            (completedSubtasks / task.subtasks.length) * 100
+        );
+
+    if (task.progressPercentage === 100) {
+
+        task.taskStatus = "Completed";
+
+    } else {
+
+        task.taskStatus = "In Progress";
+
+    }
+
+    saveTasks();
+
+    renderTasks();
+    summary_values();
+    progressBar();
 }
