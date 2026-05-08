@@ -29,7 +29,21 @@ document.addEventListener("keydown", closeModalsWithEscape);
 setupFilterButtons();
 
 function loadTasks() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const savedTasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const normalizedTasks = savedTasks.map(normalizeTask);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedTasks));
+    return normalizedTasks;
+}
+
+function normalizeTask(task, index) {
+    return {
+        ...task,
+        id: task.id || Date.now() + index,
+        taskType: task.taskType || "individual",
+        taskStatus: task.taskStatus || "In Progress",
+        progressPercentage: Number(task.progressPercentage) || 0,
+        subtasks: Array.isArray(task.subtasks) ? task.subtasks : []
+    };
 }
 
 function saveTasks() {
@@ -502,6 +516,10 @@ function toggleSubtask(subtaskIndex) {
 }
 
 function updateTaskProgress(task) {
+    if (!Array.isArray(task.subtasks)) {
+        task.subtasks = [];
+    }
+
     if (task.subtasks.length === 0) {
         task.progressPercentage = 0;
         task.taskStatus = isTaskOverdue(task) ? "Late" : "In Progress";
@@ -520,6 +538,10 @@ function updateTaskProgress(task) {
 }
 
 function countCompletedSubtasks(task) {
+    if (!Array.isArray(task.subtasks)) {
+        return 0;
+    }
+
     return task.subtasks.filter((subtask) => subtask.completed).length;
 }
 
