@@ -29,20 +29,36 @@ document.addEventListener("keydown", closeModalsWithEscape);
 setupFilterButtons();
 
 function loadTasks() {
-    const savedTasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const parsedTasks = safelyParseTasks();
+    const savedTasks = Array.isArray(parsedTasks) ? parsedTasks : [];
     const normalizedTasks = savedTasks.map(normalizeTask);
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedTasks));
     return normalizedTasks;
 }
 
+function safelyParseTasks() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch (error) {
+        return [];
+    }
+}
+
 function normalizeTask(task, index) {
+    const safeTask = task && typeof task === "object" ? task : {};
+    const numericId = Number(safeTask.id);
+
     return {
-        ...task,
-        id: task.id || Date.now() + index,
-        taskType: task.taskType || "individual",
-        taskStatus: task.taskStatus || "In Progress",
-        progressPercentage: Number(task.progressPercentage) || 0,
-        subtasks: Array.isArray(task.subtasks) ? task.subtasks : []
+        ...safeTask,
+        id: Number.isFinite(numericId) && numericId > 0 ? numericId : Date.now() + index,
+        courseName: String(safeTask.courseName || "Untitled Course").trim() || "Untitled Course",
+        taskTitle: String(safeTask.taskTitle || "Untitled Task").trim() || "Untitled Task",
+        taskDate: isValidDateValue(safeTask.taskDate) ? safeTask.taskDate : getTodayDateValue(),
+        taskType: safeTask.taskType === "group" ? "group" : "individual",
+        taskStatus: getNormalizedStatus(safeTask.taskStatus),
+        progressPercentage: clampPercentage(safeTask.progressPercentage),
+        subtasks: normalizeSubtasks(safeTask.subtasks)
     };
 }
 
@@ -83,12 +99,22 @@ function closeModalsWithEscape(event) {
 function handleAddTask(event) {
     event.preventDefault();
 
+    const courseName = document.querySelector(".course_input").value.trim();
+    const taskTitle = document.querySelector(".title_input").value.trim();
+    const taskDate = document.querySelector(".date_input").value;
+    const taskType = document.querySelector(".type_select").value;
+
+    if (!courseName || !taskTitle || !isValidDateValue(taskDate) || !taskType) {
+        addTaskForm.reportValidity();
+        return;
+    }
+
     const newTask = {
         id: Date.now(),
-        courseName: document.querySelector(".course_input").value.trim(),
-        taskTitle: document.querySelector(".title_input").value.trim(),
-        taskDate: document.querySelector(".date_input").value,
-        taskType: document.querySelector(".type_select").value,
+        courseName,
+        taskTitle,
+        taskDate,
+        taskType,
         taskStatus: "In Progress",
         progressPercentage: 0,
         subtasks: []
@@ -250,7 +276,7 @@ function renderTaskDetails(taskId) {
     const status = getStatusStyle(task.taskStatus);
     const dueDate = getDueDateInfo(task.taskDate);
     const completedSubtasks = countCompletedSubtasks(task);
-    const totalSubtasks = task.subtasks.length;
+    const totalSubtasks = getSubtasks(task).length;
 
     taskDetailsContainer.innerHTML = `
         <p class="text_muted task_course_detail">${escapeHTML(task.courseName)}</p>
@@ -380,7 +406,9 @@ function renderEditTaskForm(taskId) {
 }
 
 function renderSubtasks(task) {
-    if (task.subtasks.length === 0) {
+    const subtasks = getSubtasks(task);
+
+    if (subtasks.length === 0) {
         return `
             <li class="paragraph_if_no_subtask">
                 No subtasks yet - break this task into smaller steps.
@@ -388,7 +416,7 @@ function renderSubtasks(task) {
         `;
     }
 
-    return task.subtasks.map((subtask, index) => `
+    return subtasks.map((subtask, index) => `
         <li class="subtask_item ${subtask.completed ? "checked" : ""}">
             <button
                 class="subtask_checkbox"
@@ -403,7 +431,7 @@ function renderSubtasks(task) {
 }
 
 function renderEditSubtasks(task) {
-    return task.subtasks.map((subtask) => getEditSubtaskMarkup(subtask.text, subtask.completed)).join("");
+    return getSubtasks(task).map((subtask) => getEditSubtaskMarkup(subtask.text, subtask.completed)).join("");
 }
 
 function getEditSubtaskMarkup(text = "", completed = false) {
@@ -449,6 +477,16 @@ function saveEditedTask(form) {
     if (!task) return;
 
     const formData = new FormData(form);
+    const courseName = String(formData.get("courseName") || "").trim();
+    const taskTitle = String(formData.get("taskTitle") || "").trim();
+    const taskDate = formData.get("taskDate");
+    const taskType = formData.get("taskType");
+
+    if (!courseName || !taskTitle || !isValidDateValue(taskDate) || !taskType) {
+        form.reportValidity();
+        return;
+    }
+
     const editedSubtasks = [...form.querySelectorAll(".edit_subtask_item")]
         .map((item) => ({
             text: item.querySelector(".edit_subtask_text").value.trim(),
@@ -456,10 +494,10 @@ function saveEditedTask(form) {
         }))
         .filter((subtask) => subtask.text !== "");
 
-    task.courseName = formData.get("courseName").trim();
-    task.taskTitle = formData.get("taskTitle").trim();
-    task.taskDate = formData.get("taskDate");
-    task.taskType = formData.get("taskType");
+    task.courseName = courseName;
+    task.taskTitle = taskTitle;
+    task.taskDate = taskDate;
+    task.taskType = taskType;
     task.subtasks = editedSubtasks;
 
     updateTaskProgress(task);
@@ -493,6 +531,7 @@ function addSubtask() {
         return;
     }
 
+    task.subtasks = getSubtasks(task);
     task.subtasks.push({
         text: subtaskText,
         completed: false
@@ -506,8 +545,10 @@ function addSubtask() {
 
 function toggleSubtask(subtaskIndex) {
     const task = getTaskById(activeTaskId);
-    if (!task || !task.subtasks[subtaskIndex]) return;
+    const subtasks = getSubtasks(task);
+    if (!task || !subtasks[subtaskIndex]) return;
 
+    task.subtasks = subtasks;
     task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
     updateTaskProgress(task);
     saveTasks();
@@ -516,9 +557,7 @@ function toggleSubtask(subtaskIndex) {
 }
 
 function updateTaskProgress(task) {
-    if (!Array.isArray(task.subtasks)) {
-        task.subtasks = [];
-    }
+    task.subtasks = getSubtasks(task);
 
     if (task.subtasks.length === 0) {
         task.progressPercentage = 0;
@@ -538,11 +577,7 @@ function updateTaskProgress(task) {
 }
 
 function countCompletedSubtasks(task) {
-    if (!Array.isArray(task.subtasks)) {
-        return 0;
-    }
-
-    return task.subtasks.filter((subtask) => subtask.completed).length;
+    return getSubtasks(task).filter((subtask) => subtask.completed).length;
 }
 
 function renderSummary() {
@@ -695,6 +730,10 @@ function getRelativeDueText(remainingDays) {
 }
 
 function parseLocalDate(dateValue) {
+    if (!isValidDateValue(dateValue)) {
+        return getTodayAtMidnight();
+    }
+
     const [year, month, day] = dateValue.split("-").map(Number);
     return new Date(year, month - 1, day);
 }
@@ -712,6 +751,71 @@ function getTodayAtMidnight() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return today;
+}
+
+function getTodayDateValue() {
+    const today = getTodayAtMidnight();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function isValidDateValue(dateValue) {
+    if (typeof dateValue !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        return false;
+    }
+
+    const [year, month, day] = dateValue.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+
+    return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+}
+
+function normalizeSubtasks(subtasks) {
+    if (!Array.isArray(subtasks)) {
+        return [];
+    }
+
+    return subtasks
+        .map((subtask) => {
+            if (typeof subtask === "string") {
+                return {
+                    text: subtask.trim(),
+                    completed: false
+                };
+            }
+
+            if (!subtask || typeof subtask !== "object") {
+                return null;
+            }
+
+            return {
+                text: String(subtask.text || "").trim(),
+                completed: Boolean(subtask.completed)
+            };
+        })
+        .filter((subtask) => subtask && subtask.text !== "");
+}
+
+function getSubtasks(task) {
+    return normalizeSubtasks(task && task.subtasks);
+}
+
+function getNormalizedStatus(status) {
+    const validStatuses = ["Completed", "Late", "In Progress"];
+    return validStatuses.includes(status) ? status : "In Progress";
+}
+
+function clampPercentage(value) {
+    const percentage = Number(value);
+
+    if (!Number.isFinite(percentage)) {
+        return 0;
+    }
+
+    return Math.min(100, Math.max(0, Math.round(percentage)));
 }
 
 function escapeHTML(value) {
