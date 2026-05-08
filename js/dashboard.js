@@ -772,7 +772,7 @@ function isValidDateValue(dateValue) {
 
     return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
 }
-
+localStorage.removeItem("tasks")
 function normalizeSubtasks(subtasks) {
     if (!Array.isArray(subtasks)) {
         return [];
