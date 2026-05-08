@@ -24,6 +24,7 @@ closeDetailsButton.addEventListener("click", closeTaskDetailsModal);
 taskCardsContainer.addEventListener("click", handleTaskCardClick);
 taskDetailsModal.addEventListener("click", handleTaskDetailsClick);
 taskDetailsModal.addEventListener("keydown", handleTaskDetailsKeydown);
+taskDetailsContainer.addEventListener("submit", handleTaskDetailsSubmit);
 document.addEventListener("keydown", closeModalsWithEscape);
 setupFilterButtons();
 
@@ -54,6 +55,7 @@ function closeAddTaskModal() {
 
 function closeTaskDetailsModal() {
     taskDetailsModal.classList.add("hidden");
+    taskDetailsModal.classList.remove("editing");
     activeTaskId = null;
 }
 
@@ -94,8 +96,38 @@ function handleTaskCardClick(event) {
 }
 
 function handleTaskDetailsClick(event) {
+    const editButton = event.target.closest(".edit_task_btn");
+    const deleteButton = event.target.closest(".delete_task_btn");
+    const cancelEditButton = event.target.closest(".cancel_edit_btn");
+    const addEditSubtaskButton = event.target.closest(".add_edit_subtask_btn");
+    const deleteEditSubtaskButton = event.target.closest(".delete_edit_subtask_btn");
     const checkbox = event.target.closest(".subtask_checkbox");
     const addSubtaskButton = event.target.closest(".add_subtask_btn");
+
+    if (editButton) {
+        renderEditTaskForm(activeTaskId);
+        return;
+    }
+
+    if (deleteButton) {
+        deleteActiveTask();
+        return;
+    }
+
+    if (cancelEditButton) {
+        renderTaskDetails(activeTaskId);
+        return;
+    }
+
+    if (deleteEditSubtaskButton) {
+        deleteEditSubtaskButton.closest(".edit_subtask_item").remove();
+        return;
+    }
+
+    if (addEditSubtaskButton) {
+        addEditSubtaskRow();
+        return;
+    }
 
     if (checkbox) {
         toggleSubtask(Number(checkbox.dataset.index));
@@ -109,11 +141,24 @@ function handleTaskDetailsClick(event) {
 
 function handleTaskDetailsKeydown(event) {
     const isSubtaskInput = event.target.classList.contains("subtask_input");
+    const isEditSubtaskInput = event.target.classList.contains("edit_new_subtask_input");
 
     if (isSubtaskInput && event.key === "Enter") {
         event.preventDefault();
         addSubtask();
     }
+
+    if (isEditSubtaskInput && event.key === "Enter") {
+        event.preventDefault();
+        addEditSubtaskRow();
+    }
+}
+
+function handleTaskDetailsSubmit(event) {
+    if (!event.target.classList.contains("edit_task_form")) return;
+
+    event.preventDefault();
+    saveEditedTask(event.target);
 }
 
 function getTaskById(taskId) {
@@ -181,6 +226,7 @@ function renderTasks() {
 
 function renderTaskDetails(taskId) {
     const task = getTaskById(taskId);
+    taskDetailsModal.classList.remove("editing");
 
     if (!task) {
         taskDetailsContainer.innerHTML = `<p class="text_muted">Task not found.</p>`;
@@ -244,6 +290,81 @@ function renderTaskDetails(taskId) {
     `;
 }
 
+function renderEditTaskForm(taskId) {
+    const task = getTaskById(taskId);
+    if (!task) return;
+
+    taskDetailsModal.classList.add("editing");
+
+    taskDetailsContainer.innerHTML = `
+        <form class="edit_task_form">
+            <div class="edit_field">
+                <label for="edit_course_name">Course Name</label>
+                <input
+                    id="edit_course_name"
+                    name="courseName"
+                    type="text"
+                    value="${escapeHTML(task.courseName)}"
+                    required
+                >
+            </div>
+
+            <div class="edit_field">
+                <label for="edit_task_title">Task Title</label>
+                <input
+                    id="edit_task_title"
+                    name="taskTitle"
+                    type="text"
+                    value="${escapeHTML(task.taskTitle)}"
+                    required
+                >
+            </div>
+
+            <div class="edit_field">
+                <label for="edit_task_date">Deadline</label>
+                <input
+                    id="edit_task_date"
+                    name="taskDate"
+                    type="date"
+                    value="${escapeHTML(task.taskDate)}"
+                    required
+                >
+            </div>
+
+            <div class="edit_field">
+                <label for="edit_task_type">Task Type</label>
+                <select id="edit_task_type" name="taskType" required>
+                    <option value="individual" ${getTaskType(task) === "individual" ? "selected" : ""}>Individual</option>
+                    <option value="group" ${getTaskType(task) === "group" ? "selected" : ""}>Group</option>
+                </select>
+            </div>
+
+            <div class="edit_action_row">
+                <button class="cancel_edit_btn" type="button">Cancel</button>
+                <button class="save_edit_btn" type="submit">Save Changes</button>
+            </div>
+
+            <div class="edit_subtasks_section">
+                <h3>Subtasks</h3>
+
+                <ul class="edit_subtask_list">
+                    ${renderEditSubtasks(task)}
+                </ul>
+
+                <div class="add_subtask_row">
+                    <input
+                        type="text"
+                        class="edit_new_subtask_input"
+                        placeholder="Add a new subtask..."
+                        aria-label="Add a new subtask"
+                    >
+                    <button class="add_edit_subtask_btn" type="button" aria-label="Add subtask">+</button>
+                </div>
+            </div>
+        </form>
+    `;
+}
+
 function renderSubtasks(task) {
     if (task.subtasks.length === 0) {
         return `
@@ -265,6 +386,85 @@ function renderSubtasks(task) {
             <span>${escapeHTML(subtask.text)}</span>
         </li>
     `).join("");
+}
+
+function renderEditSubtasks(task) {
+    return task.subtasks.map((subtask) => getEditSubtaskMarkup(subtask.text, subtask.completed)).join("");
+}
+
+function getEditSubtaskMarkup(text = "", completed = false) {
+    return `
+        <li class="edit_subtask_item">
+            <input
+                class="edit_subtask_checkbox"
+                type="checkbox"
+                ${completed ? "checked" : ""}
+                aria-label="Mark subtask complete"
+            >
+            <input
+                class="edit_subtask_text"
+                type="text"
+                value="${escapeHTML(text)}"
+                placeholder="Subtask name"
+                required
+            >
+            <button class="delete_edit_subtask_btn" type="button" aria-label="Delete subtask">&times;</button>
+        </li>
+    `;
+}
+
+function addEditSubtaskRow() {
+    const input = taskDetailsContainer.querySelector(".edit_new_subtask_input");
+    const subtaskList = taskDetailsContainer.querySelector(".edit_subtask_list");
+    if (!input || !subtaskList) return;
+
+    const subtaskText = input.value.trim();
+
+    if (subtaskText === "") {
+        input.focus();
+        return;
+    }
+
+    subtaskList.insertAdjacentHTML("beforeend", getEditSubtaskMarkup(subtaskText, false));
+    input.value = "";
+    input.focus();
+}
+
+function saveEditedTask(form) {
+    const task = getTaskById(activeTaskId);
+    if (!task) return;
+
+    const formData = new FormData(form);
+    const editedSubtasks = [...form.querySelectorAll(".edit_subtask_item")]
+        .map((item) => ({
+            text: item.querySelector(".edit_subtask_text").value.trim(),
+            completed: item.querySelector(".edit_subtask_checkbox").checked
+        }))
+        .filter((subtask) => subtask.text !== "");
+
+    task.courseName = formData.get("courseName").trim();
+    task.taskTitle = formData.get("taskTitle").trim();
+    task.taskDate = formData.get("taskDate");
+    task.taskType = formData.get("taskType");
+    task.subtasks = editedSubtasks;
+
+    updateTaskProgress(task);
+    saveTasks();
+    renderDashboard();
+    renderTaskDetails(task.id);
+}
+
+function deleteActiveTask() {
+    const task = getTaskById(activeTaskId);
+    if (!task) return;
+
+    const shouldDelete = window.confirm(`Delete "${task.taskTitle}"? This cannot be undone.`);
+    if (!shouldDelete) return;
+
+    tasks = tasks.filter((savedTask) => savedTask.id !== activeTaskId);
+    saveTasks();
+    closeTaskDetailsModal();
+    renderDashboard();
 }
 
 function addSubtask() {

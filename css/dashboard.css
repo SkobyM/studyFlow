@@ -416,8 +416,29 @@
     padding: 9px 13px;
 }
 
+.delete_task_btn {
+    display: inline-flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    color: #dc2626;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 9px 13px;
+}
+
 .edit_task_btn:hover {
     background: #f7f7f8;
+}
+
+.delete_task_btn:hover {
+    background: #fee2e2;
+}
+
+.modal_overlay_detail_info.editing .edit_task_btn,
+.modal_overlay_detail_info.editing .delete_task_btn {
+    display: none;
 }
 
 .task_course_detail {
@@ -592,6 +613,168 @@
     background-color: #686773;
 }
 
+/* Edit task modal */
+
+.edit_task_form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.edit_field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit_field label,
+.edit_subtasks_section h3 {
+    color: #030213;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.edit_field input,
+.edit_field select {
+    width: 100%;
+    border: 1px solid #d7d7dc;
+    border-radius: 10px;
+    background: #f5f5f6;
+    color: #030213;
+    font-size: 16px;
+    padding: 13px 16px;
+}
+
+.edit_action_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 6px 0 10px;
+}
+
+.cancel_edit_btn,
+.save_edit_btn {
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    min-height: 47px;
+    padding: 12px 16px;
+}
+
+.cancel_edit_btn {
+    background: white;
+    border: 1px solid #e0e0e0;
+    color: #030213;
+}
+
+.save_edit_btn {
+    background: #030213;
+    border: 1px solid #030213;
+    box-shadow: 0 8px 18px rgba(3, 2, 19, 0.18);
+    color: white;
+}
+
+.cancel_edit_btn:hover {
+    background: #f7f7f8;
+}
+
+.save_edit_btn:hover {
+    background: #171625;
+}
+
+.edit_subtasks_section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.edit_subtask_list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.edit_subtask_item {
+    display: grid;
+    grid-template-columns: 22px 1fr 34px;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.edit_subtask_checkbox {
+    accent-color: #030213;
+    height: 20px;
+    width: 20px;
+}
+
+.edit_subtask_text {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #030213;
+    font-size: 15px;
+    outline: none;
+}
+
+.edit_subtask_checkbox:checked + .edit_subtask_text {
+    color: #717182;
+    text-decoration: line-through;
+}
+
+.delete_edit_subtask_btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.delete_edit_subtask_btn:hover {
+    background: #fee2e2;
+}
+
+.edit_new_subtask_input {
+    margin: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 16px;
+    background: #f5f5f6;
+}
+
+.add_edit_subtask_btn {
+    width: 52px;
+    min-width: 52px;
+    border: none;
+    border-radius: 10px;
+    background: #7d7c87;
+    color: white;
+    text-align: center;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.add_edit_subtask_btn:hover {
+    background-color: #686773;
+}
+
 @media screen and (max-width: 576px) {
     .modal_header_detail {
         align-items: flex-start;
@@ -611,5 +794,18 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 6px;
+    }
+
+    .edit_action_row {
+        grid-template-columns: 1fr;
+    }
+
+    .edit_subtask_item {
+        grid-template-columns: 22px 1fr;
+    }
+
+    .delete_edit_subtask_btn {
+        grid-column: 2;
+        justify-self: end;
     }
 }
