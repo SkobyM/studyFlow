@@ -1,423 +1,502 @@
+const STORAGE_KEY = "tasks";
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-filterButton();
-summary_values()
-progressBar()
-renderTasks();
+let tasks = loadTasks();
+let activeTaskId = null;
+let selectedStatusFilter = "all";
+let selectedTypeFilter = "all";
 
-const form = document.querySelector('.add_task_form');
-const addTaskBtn = document.querySelector('.add_task_btn a');
-const modal = document.querySelector('.modal_overlay');
-const modalDetail = document.querySelector('.modal_overlay_detail_info');
-const closeModalBtn = document.querySelector('.close_modal_btn');
-const closeModalBtnDetail = document.querySelector('.close_modal_btn_detail');
+const addTaskForm = document.querySelector(".add_task_form");
+const addTaskButton = document.querySelector(".add_task_btn a");
+const addTaskModal = document.querySelector(".modal_overlay");
+const taskDetailsModal = document.querySelector(".modal_overlay_detail_info");
+const closeAddTaskButton = document.querySelector(".close_modal_btn");
+const closeDetailsButton = document.querySelector(".close_modal_btn_detail");
+const taskCardsContainer = document.querySelector(".individual_tasks_container");
+const taskDetailsContainer = document.querySelector(".task_information_container");
 
+renderDashboard();
 
-closeModalBtnDetail.addEventListener('click', () => {
-    modalDetail.classList.add('hidden');
-});
+addTaskForm.addEventListener("submit", handleAddTask);
+addTaskButton.addEventListener("click", openAddTaskModal);
+closeAddTaskButton.addEventListener("click", closeAddTaskModal);
+closeDetailsButton.addEventListener("click", closeTaskDetailsModal);
+taskCardsContainer.addEventListener("click", handleTaskCardClick);
+taskDetailsModal.addEventListener("click", handleTaskDetailsClick);
+taskDetailsModal.addEventListener("keydown", handleTaskDetailsKeydown);
+document.addEventListener("keydown", closeModalsWithEscape);
+setupFilterButtons();
 
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    addTask();
-});
-
-addTaskBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.classList.remove('hidden');
-});
-
-closeModalBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
-});
-
-function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+function loadTasks() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
-function addTask() {
+function saveTasks() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+function renderDashboard() {
+    refreshTaskStatuses();
+    renderTasks();
+    renderSummary();
+    renderOverallProgress();
+}
+
+function openAddTaskModal(event) {
+    event.preventDefault();
+    addTaskModal.classList.remove("hidden");
+}
+
+function closeAddTaskModal() {
+    addTaskModal.classList.add("hidden");
+    addTaskForm.reset();
+}
+
+function closeTaskDetailsModal() {
+    taskDetailsModal.classList.add("hidden");
+    activeTaskId = null;
+}
+
+function closeModalsWithEscape(event) {
+    if (event.key !== "Escape") return;
+
+    closeAddTaskModal();
+    closeTaskDetailsModal();
+}
+
+function handleAddTask(event) {
+    event.preventDefault();
+
     const newTask = {
-        courseName: document.querySelector('.course_input').value,
-        taskTitle: document.querySelector('.title_input').value,
-        taskDate: document.querySelector('.date_input').value,
-        daysLeft: 7,
+        id: Date.now(),
+        courseName: document.querySelector(".course_input").value.trim(),
+        taskTitle: document.querySelector(".title_input").value.trim(),
+        taskDate: document.querySelector(".date_input").value,
+        taskType: document.querySelector(".type_select").value,
         taskStatus: "In Progress",
         progressPercentage: 0,
-        subtasks: [],
-        id: Date.now(),
+        subtasks: []
     };
 
     tasks.push(newTask);
     saveTasks();
-    renderTasks();
-    modal.classList.add('hidden');
-    form.reset();
-    summary_values();
-    progressBar();
+    renderDashboard();
+    closeAddTaskModal();
 }
 
-function getTaskDetails(taskId) {
-    const container = document.querySelector('.task_information_container');
-    const task = tasks.find(t => t.id === taskId);
-    if (task) {
-        let statusColor = "#3b82f6";
+function handleTaskCardClick(event) {
+    const taskCard = event.target.closest(".individual_tasks_card");
+    if (!taskCard) return;
 
-        if (task.taskStatus === "Completed") {
-            statusColor = "#22c55e";
-        }
-
-        if (task.taskStatus === "Late") {
-            statusColor = "#ef4444";
-        }
-
-        const subtasksHTML = task.subtasks.map((subtask, index) => {
-
-            return `
-        <li 
-            class="${subtask.completed ? 'checked' : ''}"
-            data-index="${index}"
-        >
-            ${subtask.text}
-        </li>
-    `;
-
-        }).join('');
-        return container.innerHTML = `
-
-
-                <p class="text_muted">${task.courseName}</p>
-                <h2 class="task_title_detail">${task.taskTitle}</h2>
-
-                <div class="progress_status_date">
-                    <p class="status_task_individual_task_card">${task.taskStatus}</p>
-                    <p class="text_muted">${task.taskDate}</p>
-                </div>
-
-                <div class="progress_texts_container">
-                    <p>Progress</p>
-
-                    <h4 class="progress_percentage">
-                    ${task.progressPercentage}%
-                    </h4>
-                </div>
-
-                <div class="progress_bar">
-                    <div 
-                        class="progress_fill"
-                        style="
-                            width:${task.progressPercentage}%;
-                            background:${statusColor};
-                        "
-                    >
-                    </div>
-                </div>
-
-                <div class="subtask_container">
-                    <div class="subtask_title_container">
-                        <h4>Subtasks</h4>
-                        <p class="remaining_subtask text_muted">3/4</p>
-                    </div>
-
-
-                    <ul id="myUL">
-                        ${task.subtasks.length === 0
-                ? `
-                            <p class="paragraph_if_no_subtask">
-                                No subtasks yet — break this task into smaller steps
-                            </p>
-                            `
-                : subtasksHTML
-            }
-                    </ul>
-
-                    <div id="myDIV" class="header">
-                        <input type="text" id="myInput" placeholder="Add a new subtask">
-                        <span onclick="newElement(${task.id})" class="addBtn">+</span>
-                    </div>
-                </div>
-        `;
-    } else {
-        return "<p>Task not found.</p>";
-    }
+    activeTaskId = Number(taskCard.dataset.id);
+    renderTaskDetails(activeTaskId);
+    taskDetailsModal.classList.remove("hidden");
 }
 
-function renderTasks() {
+function handleTaskDetailsClick(event) {
+    const checkbox = event.target.closest(".subtask_checkbox");
+    const addSubtaskButton = event.target.closest(".add_subtask_btn");
 
-    const container = document.querySelector('.individual_tasks_container');
-
-    container.innerHTML = "";
-
-    tasks.forEach(task => {
-
-        let statusColor = "#3b82f6";
-
-        if (task.taskStatus === "Completed") {
-            statusColor = "#22c55e";
-        }
-
-        if (task.taskStatus === "Late") {
-            statusColor = "#ef4444";
-        }
-
-        container.innerHTML += `
-
-<div 
-    class="individual_tasks_card"
-    data-id="${task.id}"
-    style="border-left: 5px solid ${statusColor};"
->
-
-    <div class="course_name_status_task">
-        <p class="text_muted">
-            ${task.courseName}
-        </p>
-
-        <p 
-            class="status_task_individual_task_card"
-            style="
-                background:${statusColor}20;
-                color:${statusColor};
-                border:1px solid ${statusColor}50;
-            "
-        >
-            ${task.taskStatus}
-        </p>
-    </div>
-
-    <h3 class="task_title_individual">
-        ${task.taskTitle}
-    </h3>
-
-    <div class="progress_texts_container">
-        <p>Progress</p>
-
-        <h4 class="progress_percentage">
-            ${task.progressPercentage}%
-        </h4>
-    </div>
-
-    <div class="progress_bar">
-        <div 
-            class="progress_fill"
-            style="
-                width:${task.progressPercentage}%;
-                background:${statusColor};
-            "
-        >
-        </div>
-    </div>
-
-    <div class="task_information_individual">
-        <p class="text_muted">
-            ${task.taskDate}
-        </p>
-
-        <p class="text_muted">
-            ${task.daysLeft} days left
-        </p>
-    </div>
-
-</div>
-`;
-    });
-
-    addTaskCardEventsRender();
-}
-
-function addTaskCardEventsRender() {
-
-    const taskCards = document.querySelectorAll('.individual_tasks_card');
-
-    taskCards.forEach(card => {
-
-        card.addEventListener('click', (e) => {
-
-            e.preventDefault();
-
-            const taskId = Number(card.dataset.id);
-
-            modalDetail.classList.remove('hidden');
-
-            getTaskDetails(taskId);
-            // Add a "checked" symbol when clicking on a list item
-            const list = document.querySelector('#myUL');
-
-            list.addEventListener('click', (ev) => {
-
-                if (ev.target.tagName === 'LI') {
-
-                    const subtaskIndex =
-                        Number(ev.target.dataset.index);
-
-                    const task =
-                        tasks.find(t => t.id === taskId);
-
-                    task.subtasks[subtaskIndex].completed =
-                        !task.subtasks[subtaskIndex].completed;
-
-                    updateTaskProgress(task);
-
-                    saveTasks();
-
-                    modalDetail.classList.remove('hidden');
-
-                    getTaskDetails(taskId);
-
-                    addTaskCardEventsRender();
-
-                }
-
-            });
-
-        });
-    });
-}
-
-
-
-function progressBar() {
-
-    const progress = document.querySelector(".overall_progress");
-
-    if (tasks.length === 0) {
-
-        progress.dataset.progress = 0;
-
-        progress.style.setProperty("--progress", `0deg`);
-
+    if (checkbox) {
+        toggleSubtask(Number(checkbox.dataset.index));
         return;
     }
 
-    const totalProgress =
-        tasks.reduce((sum, task) =>
-            sum + task.progressPercentage, 0);
-
-    const averageProgress =
-        Math.round(totalProgress / tasks.length);
-
-    progress.dataset.progress = averageProgress;
-
-    progress.style.setProperty(
-        "--progress",
-        `${averageProgress * 3.6}deg`
-    );
+    if (addSubtaskButton) {
+        addSubtask();
+    }
 }
 
-function summary_values() {
-    const tasksInformations = tasks.length;
-    const total_tasks_value = document.querySelector('.total_tasks_value');
-    const completed_tasks_value = document.querySelector('.completed_tasks_value');
-    const pending_tasks_value = document.querySelector('.pending_tasks_value');
-    const late_tasks_value = document.querySelector('.late_tasks_value');
+function handleTaskDetailsKeydown(event) {
+    const isSubtaskInput = event.target.classList.contains("subtask_input");
 
-    let completedCount = 0;
-    let inProgressCount = 0;
-    let pendingCount = 0;
-    let lateCount = 0;
-
-    tasks.forEach(task => {
-        if (task.taskStatus === "Completed") {
-            completedCount++;
-        } else if (task.taskStatus === "In Progress") {
-            inProgressCount++;
-        } else if (task.taskStatus === "Late") {
-            lateCount++;
-        }
-    });
-
-    completed_tasks_value.textContent = completedCount;
-    pending_tasks_value.textContent = inProgressCount;
-    late_tasks_value.textContent = lateCount;
-    total_tasks_value.textContent = tasksInformations;
+    if (isSubtaskInput && event.key === "Enter") {
+        event.preventDefault();
+        addSubtask();
+    }
 }
 
-function filterButton() {
-    const filterCards = document.querySelectorAll('.filter_card');
+function getTaskById(taskId) {
+    return tasks.find((task) => task.id === taskId);
+}
 
-    filterCards.forEach(card => {
-        const buttons = card.querySelectorAll('.filter_btn');
+function getFilteredTasks() {
+    return tasks.filter((task) => {
+        const statusMatches = selectedStatusFilter === "all" || task.taskStatus === selectedStatusFilter;
+        const typeMatches = selectedTypeFilter === "all" || getTaskType(task) === selectedTypeFilter;
 
-        buttons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                buttons.forEach(btn => btn.classList.remove('active'));
-
-                button.classList.add('active');
-            });
-        });
+        return statusMatches && typeMatches;
     });
 }
 
+function renderTasks() {
+    const visibleTasks = getFilteredTasks();
 
-// Create a "close" button and append it to each list item
+    if (visibleTasks.length === 0) {
+        taskCardsContainer.innerHTML = `
+            <p class="empty_tasks_message">
+                No tasks match the selected filters.
+            </p>
+        `;
+        return;
+    }
 
+    taskCardsContainer.innerHTML = visibleTasks.map((task) => {
+        const status = getStatusStyle(task.taskStatus);
+        const dueDate = getDueDateInfo(task.taskDate);
 
+        return `
+            <article
+                class="individual_tasks_card"
+                data-id="${task.id}"
+                style="border-left-color: ${status.color};"
+            >
+                <div class="course_name_status_task">
+                    <p class="text_muted">${escapeHTML(task.courseName)}</p>
+                    ${renderStatusBadge(task.taskStatus)}
+                </div>
 
+                <h3 class="task_title_individual">${escapeHTML(task.taskTitle)}</h3>
 
-// Create a new list item when clicking on the "Add" button
-function newElement(taskId) {
-    const input = document.getElementById("myInput");
+                <div class="progress_texts_container">
+                    <p>Progress</p>
+                    <h4 class="progress_percentage">${task.progressPercentage}%</h4>
+                </div>
 
-    const inputValue = input.value;
+                <div class="progress_bar" aria-label="Task progress">
+                    <div
+                        class="progress_fill"
+                        style="width: ${task.progressPercentage}%; background: ${status.color};"
+                    ></div>
+                </div>
 
-    const task = tasks.find(t => t.id === taskId);
+                <div class="task_information_individual">
+                    <p class="${dueDate.isOverdue ? "date_overdue" : "text_muted"}">${dueDate.shortText}</p>
+                    <p class="text_muted">${dueDate.relativeText}</p>
+                </div>
+            </article>
+        `;
+    }).join("");
+}
 
-    if (inputValue === '') {
+function renderTaskDetails(taskId) {
+    const task = getTaskById(taskId);
 
-        alert("You must write something!");
+    if (!task) {
+        taskDetailsContainer.innerHTML = `<p class="text_muted">Task not found.</p>`;
+        return;
+    }
 
+    const status = getStatusStyle(task.taskStatus);
+    const dueDate = getDueDateInfo(task.taskDate);
+    const completedSubtasks = countCompletedSubtasks(task);
+    const totalSubtasks = task.subtasks.length;
+
+    taskDetailsContainer.innerHTML = `
+        <p class="text_muted task_course_detail">${escapeHTML(task.courseName)}</p>
+        <h2 class="task_title_detail">${escapeHTML(task.taskTitle)}</h2>
+
+        <div class="progress_status_date">
+            ${renderStatusBadge(task.taskStatus)}
+            <p class="task_due_date ${dueDate.isOverdue ? "date_overdue" : "text_muted"}">
+                <span class="calendar_icon" aria-hidden="true">&#128197;</span>
+                ${dueDate.longText}
+            </p>
+        </div>
+
+        <div class="detail_section_header">
+            <h3>Progress</h3>
+            <p class="text_muted">${completedSubtasks} of ${totalSubtasks} completed</p>
+        </div>
+
+        <div class="progress_texts_container progress_detail_text">
+            <p class="text_muted">Progress</p>
+            <h4 class="progress_percentage">${task.progressPercentage}%</h4>
+        </div>
+
+        <div class="progress_bar detail_progress_bar" aria-label="Task progress">
+            <div
+                class="progress_fill"
+                style="width: ${task.progressPercentage}%; background: ${status.color};"
+            ></div>
+        </div>
+
+        <div class="subtask_container">
+            <div class="detail_section_header">
+                <h3>Subtasks</h3>
+                <p class="text_muted">${completedSubtasks}/${totalSubtasks}</p>
+            </div>
+
+            <ul class="subtask_list">
+                ${renderSubtasks(task)}
+            </ul>
+
+            <div class="add_subtask_row">
+                <input
+                    type="text"
+                    class="subtask_input"
+                    placeholder="Add a new subtask..."
+                    aria-label="Add a new subtask"
+                >
+                <button class="add_subtask_btn" type="button" aria-label="Add subtask">+</button>
+            </div>
+        </div>
+    `;
+}
+
+function renderSubtasks(task) {
+    if (task.subtasks.length === 0) {
+        return `
+            <li class="paragraph_if_no_subtask">
+                No subtasks yet - break this task into smaller steps.
+            </li>
+        `;
+    }
+
+    return task.subtasks.map((subtask, index) => `
+        <li class="subtask_item ${subtask.completed ? "checked" : ""}">
+            <button
+                class="subtask_checkbox"
+                type="button"
+                data-index="${index}"
+                aria-label="Toggle subtask"
+                aria-pressed="${subtask.completed}"
+            ></button>
+            <span>${escapeHTML(subtask.text)}</span>
+        </li>
+    `).join("");
+}
+
+function addSubtask() {
+    const task = getTaskById(activeTaskId);
+    const input = taskDetailsContainer.querySelector(".subtask_input");
+    if (!input) return;
+
+    const subtaskText = input.value.trim();
+
+    if (!task || subtaskText === "") {
+        input.focus();
         return;
     }
 
     task.subtasks.push({
-        text: inputValue,
+        text: subtaskText,
         completed: false
     });
 
-    input.value = "";
-
-    saveTasks();
-
-    getTaskDetails(taskId);
-
     updateTaskProgress(task);
+    saveTasks();
+    renderDashboard();
+    renderTaskDetails(task.id);
+}
 
+function toggleSubtask(subtaskIndex) {
+    const task = getTaskById(activeTaskId);
+    if (!task || !task.subtasks[subtaskIndex]) return;
+
+    task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
+    updateTaskProgress(task);
+    saveTasks();
+    renderDashboard();
+    renderTaskDetails(task.id);
 }
 
 function updateTaskProgress(task) {
-
     if (task.subtasks.length === 0) {
-
         task.progressPercentage = 0;
-
+        task.taskStatus = isTaskOverdue(task) ? "Late" : "In Progress";
         return;
     }
 
-    const completedSubtasks =
-        task.subtasks.filter(subtask =>
-            subtask.completed
-        ).length;
+    const completedSubtasks = countCompletedSubtasks(task);
 
-    task.progressPercentage =
-        Math.round(
-            (completedSubtasks / task.subtasks.length) * 100
-        );
-
+    task.progressPercentage = Math.round((completedSubtasks / task.subtasks.length) * 100);
     if (task.progressPercentage === 100) {
-
         task.taskStatus = "Completed";
-
-    } else {
-
-        task.taskStatus = "In Progress";
-
+        return;
     }
 
-    saveTasks();
+    task.taskStatus = isTaskOverdue(task) ? "Late" : "In Progress";
+}
 
-    renderTasks();
-    summary_values();
-    progressBar();
+function countCompletedSubtasks(task) {
+    return task.subtasks.filter((subtask) => subtask.completed).length;
+}
+
+function renderSummary() {
+    const totalTasksValue = document.querySelector(".total_tasks_value");
+    const completedTasksValue = document.querySelector(".completed_tasks_value");
+    const inProgressTasksValue = document.querySelector(".pending_tasks_value");
+    const lateTasksValue = document.querySelector(".late_tasks_value");
+
+    totalTasksValue.textContent = tasks.length;
+    completedTasksValue.textContent = countTasksByStatus("Completed");
+    inProgressTasksValue.textContent = countTasksByStatus("In Progress");
+    lateTasksValue.textContent = countTasksByStatus("Late");
+}
+
+function countTasksByStatus(status) {
+    return tasks.filter((task) => task.taskStatus === status).length;
+}
+
+function refreshTaskStatuses() {
+    let hasChanges = false;
+
+    tasks.forEach((task) => {
+        const previousStatus = task.taskStatus;
+        const previousProgress = task.progressPercentage;
+        updateTaskProgress(task);
+
+        if (task.taskStatus !== previousStatus || task.progressPercentage !== previousProgress) {
+            hasChanges = true;
+        }
+    });
+
+    if (hasChanges) {
+        saveTasks();
+    }
+}
+
+function renderOverallProgress() {
+    const progressCircle = document.querySelector(".overall_progress");
+
+    if (tasks.length === 0) {
+        progressCircle.dataset.progress = 0;
+        progressCircle.style.setProperty("--progress", "0deg");
+        return;
+    }
+
+    const totalProgress = tasks.reduce((sum, task) => sum + task.progressPercentage, 0);
+    const averageProgress = Math.round(totalProgress / tasks.length);
+
+    progressCircle.dataset.progress = averageProgress;
+    progressCircle.style.setProperty("--progress", `${averageProgress * 3.6}deg`);
+}
+
+function setupFilterButtons() {
+    document.querySelectorAll(".filter_card").forEach((filterCard) => {
+        filterCard.addEventListener("click", (event) => {
+            const clickedButton = event.target.closest(".filter_btn");
+            if (!clickedButton) return;
+
+            event.preventDefault();
+            setActiveFilterButton(filterCard, clickedButton);
+            updateSelectedFilter(clickedButton);
+            renderTasks();
+        });
+    });
+}
+
+function setActiveFilterButton(filterCard, clickedButton) {
+    filterCard.querySelectorAll(".filter_btn").forEach((button) => {
+        button.classList.remove("active");
+    });
+
+    clickedButton.classList.add("active");
+}
+
+function updateSelectedFilter(button) {
+    if (button.dataset.filterGroup === "status") {
+        selectedStatusFilter = button.dataset.filterValue;
+    }
+
+    if (button.dataset.filterGroup === "type") {
+        selectedTypeFilter = button.dataset.filterValue;
+    }
+}
+
+function getStatusStyle(status) {
+    const styles = {
+        Completed: {
+            color: "#00c853",
+            background: "#dcfce7",
+            border: "#86efac"
+        },
+        Late: {
+            color: "#ef4444",
+            background: "#fee2e2",
+            border: "#fecaca"
+        },
+        "In Progress": {
+            color: "#2563eb",
+            background: "#dbeafe",
+            border: "#bfdbfe"
+        }
+    };
+
+    return styles[status] || styles["In Progress"];
+}
+
+function renderStatusBadge(status) {
+    const style = getStatusStyle(status);
+
+    return `
+        <p
+            class="status_task_individual_task_card"
+            style="background: ${style.background}; color: ${style.color}; border-color: ${style.border};"
+        >
+            ${status}
+        </p>
+    `;
+}
+
+function getDueDateInfo(dateValue) {
+    const dueDate = parseLocalDate(dateValue);
+    const today = getTodayAtMidnight();
+    const remainingDays = Math.ceil((dueDate - today) / ONE_DAY_IN_MS);
+    const formattedDate = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+    }).format(dueDate);
+
+    return {
+        isOverdue: remainingDays < 0,
+        shortText: formattedDate,
+        longText: `${formattedDate} (${getRelativeDueText(remainingDays)})`,
+        relativeText: getRelativeDueText(remainingDays)
+    };
+}
+
+function getRelativeDueText(remainingDays) {
+    const absoluteDays = Math.abs(remainingDays);
+
+    if (remainingDays < 0) {
+        return `${absoluteDays} ${absoluteDays === 1 ? "day" : "days"} overdue`;
+    }
+
+    if (remainingDays === 0) {
+        return "due today";
+    }
+
+    return `${remainingDays} ${remainingDays === 1 ? "day" : "days"} left`;
+}
+
+function parseLocalDate(dateValue) {
+    const [year, month, day] = dateValue.split("-").map(Number);
+    return new Date(year, month - 1, day);
+}
+
+function isTaskOverdue(task) {
+    const dueDate = parseLocalDate(task.taskDate);
+    return dueDate < getTodayAtMidnight();
+}
+
+function getTaskType(task) {
+    return task.taskType || "individual";
+}
+
+function getTodayAtMidnight() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+}
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }

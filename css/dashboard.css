@@ -172,7 +172,7 @@
 .individual_tasks_card {
     border: 1px solid var(--border-color);
     border-left: 5px solid #3b82f6;
-    border-radius: 18px;
+    border-radius: 8px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -233,6 +233,19 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.empty_tasks_message {
+    color: var(--text-muted-color);
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
+.date_overdue {
+    color: #ff0000;
 }
 
 /* Modal for add task */
@@ -357,45 +370,113 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+    padding: 22px 21px 15px;
+}
+
+.detail_header_left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .modal_individual_task_detail {
     background: white;
-    width: 600px;
-    height: auto;
-    padding: 30px;
-    border-radius: 20px;
+    width: min(644px, calc(100vw - 24px));
+    max-height: min(92vh, 720px);
+    overflow-y: auto;
+    padding: 0;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.25);
+}
+
+.task_information_container {
+    padding: 27px 21px 22px;
 }
 
 .close_modal_btn_detail {
     background: transparent;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    line-height: 1;
     cursor: pointer;
 }
 
+.edit_task_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    color: #030213;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 9px 13px;
+}
+
+.edit_task_btn:hover {
+    background: #f7f7f8;
+}
+
+.task_course_detail {
+    margin-bottom: 8px;
+}
+
 .task_title_detail {
-    margin-top: 8px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.5rem;
+    line-height: 1.2;
 }
 
 .progress_status_date {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
-    margin: 12px 0 18px 0;
+    flex-wrap: wrap;
+    margin: 12px 0 27px 0;
+}
+
+.task_due_date {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendar_icon {
+    font-size: 14px;
+}
+
+.detail_section_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.detail_section_header h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+}
+
+.progress_detail_text {
+    margin-bottom: 8px;
+}
+
+.detail_progress_bar {
+    margin-bottom: 28px;
 }
 
 .hidden {
     display: none;
 }
 
-/* subTasks */
+/* Subtasks in the task details modal */
 
-.subtask_title_container{
+.subtask_title_container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -403,98 +484,132 @@
     margin-top: 12px;
 }
 
-
-
-/* Style the list items */
-ul li {
-  cursor: pointer;
-  position: relative;
-  padding: 12px 8px 12px 40px;
-  list-style-type: none;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  margin-bottom: 8px;
-  font-size: 18px;
-  transition: 0.2s;
-  
-  /* make the list items unselectable */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.subtask_list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
 }
 
-/* Darker background-color on hover */
-ul li:hover {
-  background: #ddd;
-}
-
-/* When clicked on, add a background color and strike out text */
-ul li.checked {
-  color: var(--text-muted-color);
-  text-decoration: line-through;
-}
-
-/* Add a "checked" mark when clicked on */
-ul li.checked::before {
-  content: '';
-  position: absolute;
-  border-color: #030213;
-  border-style: solid;
-  border-width: 0 2px 2px 0;
-  top: 10px;
-  left: 16px;
-  transform: rotate(45deg);
-  height: 15px;
-  width: 7px;
-}
-
-/* Style the close button */
-.close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 12px 16px 12px 16px;
-}
-
-.paragraph_if_no_subtask{
-    padding: 30px;
+.subtask_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 50px;
+    padding: 12px;
     border: 1px solid var(--border-color);
-    border-style: dashed;
-    margin-bottom: 8px;
-    color: var(--text-muted-color);
-    text-align: center;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.subtask_item span {
+    color: #717182;
+}
+
+.subtask_item.checked span {
+    text-decoration: line-through;
+}
+
+.subtask_checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #030213;
+    border-radius: 4px;
+    background: #030213;
+    cursor: pointer;
+    position: relative;
+    flex: 0 0 20px;
+}
+
+.subtask_checkbox::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.subtask_item:not(.checked) .subtask_checkbox {
+    background: #fff;
+}
+
+.subtask_item:not(.checked) .subtask_checkbox::after {
     display: none;
 }
-.header{
+
+.paragraph_if_no_subtask {
+    padding: 24px;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    color: var(--text-muted-color);
+    text-align: center;
+}
+
+.add_subtask_row {
     display: flex;
     gap: 8px;
 }
 
-/* Style the input */
+.header {
+    display: flex;
+    gap: 8px;
+}
+
+.subtask_input,
 .header input {
-  margin: 0;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  width: 100%;
-  padding: 10px;
-  float: left;
-  font-size: 16px;
+    margin: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 16px;
+    background: #f5f5f6;
 }
 
-/* Style the "Add" button */
+.add_subtask_btn,
 .addBtn {
-  padding: 10px 20px 10px 20px;
-  background: var(--text-muted-color);
-  border-radius: 12px;
-  color: white;
-  float: left;
-  text-align: center;
-  font-size: 24px;
-  cursor: pointer;
-  transition: 0.3s;
+    width: 52px;
+    min-width: 52px;
+    border: none;
+    border-radius: 10px;
+    background: #7d7c87;
+    color: white;
+    text-align: center;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
+.add_subtask_btn:hover,
 .addBtn:hover {
-  background-color: #bbb;
+    background-color: #686773;
+}
+
+@media screen and (max-width: 576px) {
+    .modal_header_detail {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .detail_header_left {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .task_information_container {
+        padding: 22px 16px;
+    }
+
+    .detail_section_header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
 }
