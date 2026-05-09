@@ -10,3 +10,15 @@ menu.addEventListener("click", () => {
         menu.textContent = "☰";
     }
 });
+
+const navAuthBtns = document.querySelectorAll(".nav_auth_btn");
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+
+    navAuthBtns.forEach(btn => {
+        btn.classList.add("hidden");
+    });
+
+}

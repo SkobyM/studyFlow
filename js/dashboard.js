@@ -1,3 +1,14 @@
+const currentUser = JSON.parse(
+    localStorage.getItem("user")
+);
+
+if (!currentUser) {
+
+    window.location.href =
+        "../html/signIn.html";
+
+}
+
 const STORAGE_KEY = "tasks";
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -27,6 +38,7 @@ taskDetailsModal.addEventListener("keydown", handleTaskDetailsKeydown);
 taskDetailsContainer.addEventListener("submit", handleTaskDetailsSubmit);
 document.addEventListener("keydown", closeModalsWithEscape);
 setupFilterButtons();
+
 
 function loadTasks() {
     const parsedTasks = safelyParseTasks();
