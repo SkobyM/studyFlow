@@ -81,6 +81,20 @@ textarea {
     transform: scale(1.05);
 }
 
+.contact_form_message {
+    min-height: 24px;
+    margin: 0 0 20px;
+    font-weight: 600;
+}
+
+.contact_form_message.success {
+    color: #15803d;
+}
+
+.contact_form_message.error {
+    color: #dc2626;
+}
+
 @media screen and (max-width: 768px) {
 
     body {

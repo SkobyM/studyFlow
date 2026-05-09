@@ -123,7 +123,7 @@ app.post("/signin", (req, res) => {
         const user = result[0];
 
         const isMatch = await bcrypt.compare(
-            password,
+            cleanPassword,
             user.password
         );
 
@@ -403,6 +403,60 @@ app.delete("/tasks/:id", (req, res) => {
     });
 });
 
+app.post("/contact", (req, res) => {
+    const firstName = String(req.body.first_name || "").trim();
+    const lastName = String(req.body.last_name || "").trim();
+    const gender = String(req.body.gender || "").trim();
+    const mobile = String(req.body.mobile || "").trim();
+    const dateOfBirth = String(req.body.date_of_birth || "").trim();
+    const email = String(req.body.email || "").trim().toLowerCase();
+    const language = String(req.body.language || "").trim();
+    const message = String(req.body.message || "").trim();
+
+    if (
+        !hasLength(firstName, 2, 40) ||
+        !hasLength(lastName, 2, 40) ||
+        !isValidGender(gender) ||
+        !isValidMobile(mobile) ||
+        !isValidBirthDate(dateOfBirth) ||
+        !isValidEmail(email) ||
+        email.length > 120 ||
+        !isValidLanguage(language) ||
+        !hasLength(message, 10, 1000)
+    ) {
+        return res.status(400).json({
+            message: "Please enter valid contact information"
+        });
+    }
+
+    const sql = `
+        INSERT INTO contact_messages
+            (first_name, last_name, gender, mobile, date_of_birth, email, language, message)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+        sql,
+        [firstName, lastName, gender, mobile, dateOfBirth, email, language, message],
+        (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    message: "Error sending message"
+                });
+            }
+
+            res.status(201).json({
+                message: "Message sent successfully"
+            });
+        }
+    );
+});
+
+function hasLength(value, min, max) {
+    return value.length >= min && value.length <= max;
+}
+
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -413,6 +467,22 @@ function isValidDate(dateValue) {
 
 function isValidTaskType(taskType) {
     return taskType === "individual" || taskType === "group";
+}
+
+function isValidGender(gender) {
+    return gender === "male" || gender === "female";
+}
+
+function isValidMobile(mobile) {
+    return /^05[0-9]{8}$/.test(mobile);
+}
+
+function isValidLanguage(language) {
+    return ["Arabic", "English", "French"].includes(language);
+}
+
+function isValidBirthDate(dateValue) {
+    return isValidDate(dateValue) && isPastDate(dateValue);
 }
 
 function normalizeSubtasks(subtasks) {

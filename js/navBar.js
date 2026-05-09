@@ -47,11 +47,15 @@ if (user) {
         logoutBtn.style.display = "block";
         logoutBtn.addEventListener("click", () => {
             localStorage.removeItem("user");
-            window.location.href = "../index.html";
+            window.location.href = getHomePath();
         });
     }
 }
 
 if (navbar) {
     navbar.classList.add("auth-ready");
+}
+
+function getHomePath() {
+    return window.location.pathname.includes("/html/") ? "../index.html" : "index.html";
 }
