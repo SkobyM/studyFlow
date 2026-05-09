@@ -7,8 +7,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     gap: 10px;
+    padding: 20px;
 }
 
 .sign_in_img_logo {
@@ -38,7 +39,7 @@ body {
     border: 1px solid rgba(3, 2, 19, 0.2);
     border-radius: 12px;
     padding: 25px;
-    width: 50%;
+    width: min(500px, 90vw);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -46,7 +47,8 @@ body {
     padding: 10px;
     border: 1px solid rgba(3, 2, 19, 0.2);
     border-radius: 8px;
-    width: 95%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form_group {
@@ -104,7 +106,6 @@ body {
 @media screen and (max-width: 768px) {
 
     .form_container {
-
-        width: 80%;
+        width: 90vw;
     }
 }

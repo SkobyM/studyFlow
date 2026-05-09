@@ -6,7 +6,7 @@ form.addEventListener("submit", async (e) => {
 
     const email = document.querySelector(
         'input[name="email"]'
-    ).value;
+    ).value.trim();
 
     const password = document.querySelector(
         'input[name="password"]'
@@ -48,6 +48,7 @@ form.addEventListener("submit", async (e) => {
     } catch (error) {
 
         console.log(error);
+        alert("Could not connect to the server. Make sure the backend is running.");
 
     }
 

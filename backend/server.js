@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Advice: for a real deployment, move these database values into environment variables.
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -31,10 +32,19 @@ app.listen(3000, () => {
 app.post("/signup", async (req, res) => {
 
     const { full_name, email, password } = req.body;
+    const cleanFullName = String(full_name || "").trim();
+    const cleanEmail = String(email || "").trim().toLowerCase();
+    const cleanPassword = String(password || "");
+
+    if (!cleanFullName || !isValidEmail(cleanEmail) || cleanPassword.length < 8) {
+        return res.status(400).json({
+            message: "Please enter a name, valid email, and password of at least 8 characters"
+        });
+    }
 
     try {
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(cleanPassword, 10);
 
         const sql = `
             INSERT INTO users (full_name, email, password)
@@ -43,11 +53,18 @@ app.post("/signup", async (req, res) => {
 
         db.query(
             sql,
-            [full_name, email, hashedPassword],
+            [cleanFullName, cleanEmail, hashedPassword],
             (err, result) => {
 
                 if (err) {
                     console.log(err);
+
+                    if (err.code === "ER_DUP_ENTRY") {
+                        return res.status(409).json({
+                            message: "Email is already registered"
+                        });
+                    }
+
                     return res.status(500).json({
                         message: "Error creating account"
                     });
@@ -75,10 +92,18 @@ app.post("/signup", async (req, res) => {
 app.post("/signin", (req, res) => {
 
     const { email, password } = req.body;
+    const cleanEmail = String(email || "").trim().toLowerCase();
+    const cleanPassword = String(password || "");
+
+    if (!isValidEmail(cleanEmail) || !cleanPassword) {
+        return res.status(400).json({
+            message: "Please enter a valid email and password"
+        });
+    }
 
     const sql = "SELECT * FROM users WHERE email = ?";
 
-    db.query(sql, [email], async (err, result) => {
+    db.query(sql, [cleanEmail], async (err, result) => {
 
         if (err) {
             return res.status(500).json({
@@ -87,8 +112,8 @@ app.post("/signin", (req, res) => {
         }
 
         if (result.length === 0) {
-            return res.status(404).json({
-                message: "User not found"
+            return res.status(401).json({
+                message: "Invalid email or password"
             });
         }
 
@@ -101,7 +126,7 @@ app.post("/signin", (req, res) => {
 
         if (!isMatch) {
             return res.status(401).json({
-                message: "Wrong password"
+                message: "Invalid email or password"
             });
         }
 
@@ -117,3 +142,7 @@ app.post("/signin", (req, res) => {
     });
 
 });
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}

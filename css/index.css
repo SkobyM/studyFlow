@@ -74,6 +74,10 @@
     padding: 15px 25px;
     color: var(--text-primary-color-black);
     border: 1px solid var(--border-color);
+    background-color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 
