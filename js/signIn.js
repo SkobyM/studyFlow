@@ -36,6 +36,7 @@ form.addEventListener("submit", async (e) => {
 
         if (response.ok) {
 
+            // Save the basic user info so other pages know someone is signed in.
             localStorage.setItem(
                 "user",
                 JSON.stringify(data.user)

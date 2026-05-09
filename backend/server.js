@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Advice: for a real deployment, move these database values into environment variables.
+// Local database settings for now. Move them to environment variables before hosting.
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -36,6 +36,7 @@ app.post("/signup", async (req, res) => {
     const cleanEmail = String(email || "").trim().toLowerCase();
     const cleanPassword = String(password || "");
 
+    // Keep the backend strict too, because users can bypass browser validation.
     if (!cleanFullName || !isValidEmail(cleanEmail) || cleanPassword.length < 8) {
         return res.status(400).json({
             message: "Please enter a name, valid email, and password of at least 8 characters"
@@ -44,6 +45,7 @@ app.post("/signup", async (req, res) => {
 
     try {
 
+        // Store only the hashed password, never the plain password.
         const hashedPassword = await bcrypt.hash(cleanPassword, 10);
 
         const sql = `
@@ -112,6 +114,7 @@ app.post("/signin", (req, res) => {
         }
 
         if (result.length === 0) {
+            // Same message as wrong password so we do not reveal which emails exist.
             return res.status(401).json({
                 message: "Invalid email or password"
             });

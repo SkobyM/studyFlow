@@ -12,6 +12,7 @@ form.addEventListener("submit", async (e) => {
 
     const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
 
+    // Catch simple mistakes before sending anything to the server.
     if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
@@ -24,6 +25,7 @@ form.addEventListener("submit", async (e) => {
 
     try {
 
+        // These property names match what backend/server.js reads from req.body.
         const response = await fetch("http://localhost:3000/signup", {
 
             method: "POST",

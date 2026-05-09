@@ -126,6 +126,7 @@ body {
 
 @media (max-width: 576px) {
 
+    /* Keep the fixed navbar from touching the screen edges on phones. */
     .navbar {
         padding: 15px 20px;
     }
