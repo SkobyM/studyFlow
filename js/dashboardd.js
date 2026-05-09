@@ -1,19 +1,18 @@
-let currentUser = null;
-
-try {
-    currentUser = JSON.parse(localStorage.getItem("user"));
-} catch (error) {
-    localStorage.removeItem("user");
-}
+const currentUser = JSON.parse(
+    localStorage.getItem("user")
+);
 
 if (!currentUser) {
-    window.location.href = "../html/signIn.html";
+
+    window.location.href =
+        "../html/signIn.html";
+
 }
 
-const API_URL = "http://localhost:3000";
+const STORAGE_KEY = "tasks";
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-let tasks = [];
+let tasks = loadTasks();
 let activeTaskId = null;
 let selectedStatusFilter = "all";
 let selectedTypeFilter = "all";
@@ -27,7 +26,7 @@ const closeDetailsButton = document.querySelector(".close_modal_btn_detail");
 const taskCardsContainer = document.querySelector(".individual_tasks_container");
 const taskDetailsContainer = document.querySelector(".task_information_container");
 
-loadTasks();
+renderDashboard();
 
 addTaskForm.addEventListener("submit", handleAddTask);
 addTaskButton.addEventListener("click", openAddTaskModal);
@@ -40,102 +39,31 @@ taskDetailsContainer.addEventListener("submit", handleTaskDetailsSubmit);
 document.addEventListener("keydown", closeModalsWithEscape);
 setupFilterButtons();
 
-async function loadTasks() {
+
+function loadTasks() {
+    const parsedTasks = safelyParseTasks();
+    const savedTasks = Array.isArray(parsedTasks) ? parsedTasks : [];
+    const normalizedTasks = savedTasks.map(normalizeTask);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedTasks));
+    return normalizedTasks;
+}
+
+function safelyParseTasks() {
     try {
-        const response = await fetch(`${API_URL}/tasks?user_id=${currentUser.id}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message);
-        }
-
-        tasks = data.map(normalizeTask);
-        refreshTaskStatuses();
-        renderDashboard();
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     } catch (error) {
-        taskCardsContainer.innerHTML = `<p class="empty_tasks_message">Could not load tasks.</p>`;
+        return [];
     }
 }
 
-async function handleAddTask(event) {
-    event.preventDefault();
-
-    const courseName = document.querySelector(".course_input").value.trim();
-    const taskTitle = document.querySelector(".title_input").value.trim();
-    const taskDate = document.querySelector(".date_input").value;
-    const taskType = document.querySelector(".type_select").value;
-
-    if (!courseName || !taskTitle || !isValidDateValue(taskDate) || !taskType) {
-        addTaskForm.reportValidity();
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_URL}/tasks`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                user_id: currentUser.id,
-                courseName,
-                taskTitle,
-                taskDate,
-                taskType
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message);
-        }
-
-        tasks.push(normalizeTask(data.task));
-        renderDashboard();
-        closeAddTaskModal();
-    } catch (error) {
-        alert(error.message || "Could not add task");
-    }
-}
-
-async function saveTaskToDatabase(task) {
-    updateTaskProgress(task);
-
-    const response = await fetch(`${API_URL}/tasks/${task.id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            user_id: currentUser.id,
-            courseName: task.courseName,
-            taskTitle: task.taskTitle,
-            taskDate: task.taskDate,
-            taskType: task.taskType,
-            subtasks: getSubtasks(task)
-        })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data.message);
-    }
-
-    const savedTask = normalizeTask(data.task);
-    tasks = tasks.map((taskItem) => (
-        taskItem.id === savedTask.id ? savedTask : taskItem
-    ));
-
-    return savedTask;
-}
-
-function normalizeTask(task) {
+function normalizeTask(task, index) {
     const safeTask = task && typeof task === "object" ? task : {};
+    const numericId = Number(safeTask.id);
 
     return {
-        id: Number(safeTask.id),
+        ...safeTask,
+        id: Number.isFinite(numericId) && numericId > 0 ? numericId : Date.now() + index,
         courseName: String(safeTask.courseName || "Untitled Course").trim() || "Untitled Course",
         taskTitle: String(safeTask.taskTitle || "Untitled Task").trim() || "Untitled Task",
         taskDate: isValidDateValue(safeTask.taskDate) ? safeTask.taskDate : getTodayDateValue(),
@@ -146,7 +74,12 @@ function normalizeTask(task) {
     };
 }
 
+function saveTasks() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
 function renderDashboard() {
+    refreshTaskStatuses();
     renderTasks();
     renderSummary();
     renderOverallProgress();
@@ -173,6 +106,36 @@ function closeModalsWithEscape(event) {
 
     closeAddTaskModal();
     closeTaskDetailsModal();
+}
+
+function handleAddTask(event) {
+    event.preventDefault();
+
+    const courseName = document.querySelector(".course_input").value.trim();
+    const taskTitle = document.querySelector(".title_input").value.trim();
+    const taskDate = document.querySelector(".date_input").value;
+    const taskType = document.querySelector(".type_select").value;
+
+    if (!courseName || !taskTitle || !isValidDateValue(taskDate) || !taskType) {
+        addTaskForm.reportValidity();
+        return;
+    }
+
+    const newTask = {
+        id: Date.now(),
+        courseName,
+        taskTitle,
+        taskDate,
+        taskType,
+        taskStatus: "In Progress",
+        progressPercentage: 0,
+        subtasks: []
+    };
+
+    tasks.push(newTask);
+    saveTasks();
+    renderDashboard();
+    closeAddTaskModal();
 }
 
 function handleTaskCardClick(event) {
@@ -521,7 +484,7 @@ function addEditSubtaskRow() {
     input.focus();
 }
 
-async function saveEditedTask(form) {
+function saveEditedTask(form) {
     const task = getTaskById(activeTaskId);
     if (!task) return;
 
@@ -549,41 +512,26 @@ async function saveEditedTask(form) {
     task.taskType = taskType;
     task.subtasks = editedSubtasks;
 
-    try {
-        const savedTask = await saveTaskToDatabase(task);
-        renderDashboard();
-        renderTaskDetails(savedTask.id);
-    } catch (error) {
-        alert(error.message || "Could not save task");
-    }
+    updateTaskProgress(task);
+    saveTasks();
+    renderDashboard();
+    renderTaskDetails(task.id);
 }
 
-async function deleteActiveTask() {
+function deleteActiveTask() {
     const task = getTaskById(activeTaskId);
     if (!task) return;
 
     const shouldDelete = window.confirm(`Delete "${task.taskTitle}"? This cannot be undone.`);
     if (!shouldDelete) return;
 
-    try {
-        const response = await fetch(`${API_URL}/tasks/${task.id}?user_id=${currentUser.id}`, {
-            method: "DELETE"
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message);
-        }
-
-        tasks = tasks.filter((savedTask) => savedTask.id !== activeTaskId);
-        closeTaskDetailsModal();
-        renderDashboard();
-    } catch (error) {
-        alert(error.message || "Could not delete task");
-    }
+    tasks = tasks.filter((savedTask) => savedTask.id !== activeTaskId);
+    saveTasks();
+    closeTaskDetailsModal();
+    renderDashboard();
 }
 
-async function addSubtask() {
+function addSubtask() {
     const task = getTaskById(activeTaskId);
     const input = taskDetailsContainer.querySelector(".subtask_input");
     if (!input) return;
@@ -601,30 +549,23 @@ async function addSubtask() {
         completed: false
     });
 
-    try {
-        const savedTask = await saveTaskToDatabase(task);
-        renderDashboard();
-        renderTaskDetails(savedTask.id);
-    } catch (error) {
-        alert(error.message || "Could not add subtask");
-    }
+    updateTaskProgress(task);
+    saveTasks();
+    renderDashboard();
+    renderTaskDetails(task.id);
 }
 
-async function toggleSubtask(subtaskIndex) {
+function toggleSubtask(subtaskIndex) {
     const task = getTaskById(activeTaskId);
     const subtasks = getSubtasks(task);
     if (!task || !subtasks[subtaskIndex]) return;
 
     task.subtasks = subtasks;
     task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
-
-    try {
-        const savedTask = await saveTaskToDatabase(task);
-        renderDashboard();
-        renderTaskDetails(savedTask.id);
-    } catch (error) {
-        alert(error.message || "Could not update subtask");
-    }
+    updateTaskProgress(task);
+    saveTasks();
+    renderDashboard();
+    renderTaskDetails(task.id);
 }
 
 function updateTaskProgress(task) {
@@ -668,7 +609,21 @@ function countTasksByStatus(status) {
 }
 
 function refreshTaskStatuses() {
-    tasks.forEach(updateTaskProgress);
+    let hasChanges = false;
+
+    tasks.forEach((task) => {
+        const previousStatus = task.taskStatus;
+        const previousProgress = task.progressPercentage;
+        updateTaskProgress(task);
+
+        if (task.taskStatus !== previousStatus || task.progressPercentage !== previousProgress) {
+            hasChanges = true;
+        }
+    });
+
+    if (hasChanges) {
+        saveTasks();
+    }
 }
 
 function renderOverallProgress() {
@@ -849,7 +804,6 @@ function normalizeSubtasks(subtasks) {
             }
 
             return {
-                id: Number(subtask.id) || null,
                 text: String(subtask.text || "").trim(),
                 completed: Boolean(subtask.completed)
             };

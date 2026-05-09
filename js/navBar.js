@@ -32,6 +32,11 @@ try {
 if (user) {
     navAuthBtns.forEach((btn) => {
         btn.classList.add("hidden");
+
+        const mobileSignInItem = btn.closest(".sign-in-mobile");
+        if (mobileSignInItem) {
+            mobileSignInItem.classList.add("hidden");
+        }
     });
 
     if (userNameNavBar) {
