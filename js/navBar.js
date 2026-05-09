@@ -16,6 +16,7 @@ if (menu && navLinks) {
 
 const navAuthBtns = document.querySelectorAll(".nav_auth_btn");
 const userNameNavBar = document.querySelector(".user_name");
+const navbar = document.querySelector(".navbar");
 
 let user = null;
 
@@ -32,6 +33,12 @@ if (user) {
         btn.classList.add("hidden");
     });
 
-    userNameNavBar.style.display = "block";
-    userNameNavBar.textContent = user.full_name;
+    if (userNameNavBar) {
+        userNameNavBar.style.display = "block";
+        userNameNavBar.textContent = user.full_name || user.name || user.email || "User";
+    }
+}
+
+if (navbar) {
+    navbar.classList.add("auth-ready");
 }

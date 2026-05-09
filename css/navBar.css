@@ -124,6 +124,14 @@ body {
     display: inline-flex;
 }
 
+.nav_auth_btn {
+    visibility: hidden;
+}
+
+.navbar.auth-ready .nav_auth_btn {
+    visibility: visible;
+}
+
 @media (max-width: 576px) {
 
     /* Keep the fixed navbar from touching the screen edges on phones. */
