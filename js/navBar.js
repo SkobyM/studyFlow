@@ -17,6 +17,7 @@ if (menu && navLinks) {
 const navAuthBtns = document.querySelectorAll(".nav_auth_btn");
 const userNameNavBar = document.querySelector(".user_name");
 const navbar = document.querySelector(".navbar");
+const logoutBtn = document.querySelector(".logout_button");
 
 let user = null;
 
@@ -36,6 +37,13 @@ if (user) {
     if (userNameNavBar) {
         userNameNavBar.style.display = "block";
         userNameNavBar.textContent = user.full_name || user.name || user.email || "User";
+    }
+    if (logoutBtn) {
+        logoutBtn.style.display = "block";
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.href = "../index.html";
+        });
     }
 }
 
