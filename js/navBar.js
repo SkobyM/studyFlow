@@ -15,6 +15,7 @@ if (menu && navLinks) {
 }
 
 const navAuthBtns = document.querySelectorAll(".nav_auth_btn");
+const userNameNavBar = document.querySelector(".user_name");
 
 let user = null;
 
@@ -30,4 +31,7 @@ if (user) {
     navAuthBtns.forEach((btn) => {
         btn.classList.add("hidden");
     });
+
+    userNameNavBar.style.display = "block";
+    userNameNavBar.textContent = user.full_name;
 }

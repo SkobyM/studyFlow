@@ -208,6 +208,13 @@ footer {
     margin-top: 100px;
 }
 
+.user_name{
+    display: none;
+    background-color: #e9ebef;
+    padding: 8px 12px 8px 12px;
+    border-radius: 12px;
+}
+
 .hidden {
     display: none;
 }
